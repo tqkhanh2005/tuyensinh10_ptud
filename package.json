@@ -1,0 +1,18 @@
+{
+  "name": "tuyensinh10-cantho",
+  "version": "1.0.0",
+  "description": "Cổng thông tin tuyển sinh lớp 10 - Sở GD&ĐT TP Cần Thơ",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "php": "C:\\xampp\\php\\php.exe -S 127.0.0.1:4000 router.php",
+    "serve": "php -S 127.0.0.1:4000 router.php"
+  },
+  "keywords": [
+    "tuyensinh10",
+    "cantho",
+    "web"
+  ],
+  "author": "",
+  "license": "ISC"
+}

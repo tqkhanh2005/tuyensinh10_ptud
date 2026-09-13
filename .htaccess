@@ -1,0 +1,15 @@
+RewriteEngine On
+
+# Neu la file hoac thu muc ton tai thuc te thi bo qua
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Dinh tuyen cac trang chuc nang (khong dung RewriteBase / de tranh loi thu muc con)
+RewriteRule ^ket-qua/?$ ket-qua.php [L,QSA]
+RewriteRule ^auth/login/?$ auth/login.php [L,QSA]
+RewriteRule ^login/?$ auth/login.php [L,QSA]
+RewriteRule ^captcha/image/?$ api/captcha.php [L,QSA]
+
+# Fallback ve index.php
+RewriteRule ^$ index.php [L,QSA]

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tra cứu kết quả</title>
+  <meta name="description" content="Trang dành riêng cho học sinh – tra cứu kết quả và đăng ký tuyển sinh." />
+  <link rel="icon" type="image/x-icon" href="/public/img/graduate.ico" />
+  <link rel="icon" type="image/png" href="/public/img/graduate.png" />
+  <link rel="apple-touch-icon" href="/public/img/graduate.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Be_Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+
+  <!-- Load Bootstrap first -->
+  <link href="/public/vendor/bootstrap/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/public/vendor/fontawesome/css/all.min.css">
+  
+  <!-- SweetAlert2 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <!-- Load Tailwind last to have higher utility priority -->
+  
+  <link href="/public/tailwind.css" rel="stylesheet" />
+  <link href="/public/app.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    :root {
+      --ts-primary: #1769aa;
+      --ts-secondary: #0d2a52;
+      --ts-accent: #fdb813;
+      --ts-light: #f7f9fb;
+    }
+    .text-ts-primary { color: var(--ts-primary); }
+    .bg-ts-primary { background-color: var(--ts-primary); }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VQ1TSWPN87"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-VQ1TSWPN87');
+
+    gtag('config', 'G-540728Z57D');
+  </script>
+  
+</head>
+
+<body class="bg-light">
+  <header class="tw-bg-white/80 tw-backdrop-blur-md tw-border-b tw-border-outline-variant/30 tw-sticky tw-top-0 tw-z-40 tw-shadow-sm">
+  <div class="tw-flex tw-justify-between tw-items-center tw-px-8 tw-h-20">
+    <div class="tw-flex tw-items-center">
+      <a href="/" class="tw-inline-flex tw-items-center" aria-label="Home">
+        <img src="/public/img/graduate.png" alt="Logo" class="tw-h-11 tw-w-11 tw-object-contain" />
+      </a>
+    </div>
+
+    <div class="tw-flex tw-items-center tw-gap-4">
+      
+      
+  <a class="btn btn-primary btn-sm px-3 rounded-pill" href="/auth/login">Đăng nhập</a>
+
+
+    </div>
+  </div>
+</header>
+
+
+  <main class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-7">
+
+        <div class="text-center mb-5">
+          <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-circle mb-4 overflow-hidden" style="width: 80px; height: 80px;">
+            <div style="margin-right: -6px; margin-bottom: -10px;">
+              <i class="fas fa-chalkboard-teacher" style="font-size: 2.4em; color: #0a2a4a;"></i>
+            </div>
+          </div>
+          <h1 class="fw-bold text-ts-primary">Tra cứu kết quả Tuyển sinh 10</h1>
+          <p class="text-muted mb-0 mt-2">Vui lòng nhập đúng số báo danh hoặc CCCD/Định danh cá nhân.</p>
+        </div>
+
+        
+          
+           
+          <form method="post" action="/ket-qua">
+            <div class="mx-auto" style="max-width: 700px;">
+              <div class="d-flex flex-column flex-lg-row gap-3">
+                <input
+                  type="text"
+                  name="cccd"
+                  class="form-control form-control-lg flex-grow-1 text-center"
+                  style="margin-bottom: 0; font-size: 1rem;"
+                  placeholder="Nhập Số báo danh hoặc CCCD/Định danh cá nhân"
+                  pattern="[a-zA-Z0-9]+"
+                  title="Chỉ chấp nhận chữ cái và số"
+                  value=""
+                  required />
+                <button type="submit" class="btn btn-lg flex-shrink-0" style="background-color: #0a2a4a; border-color: #0a2a4a; color: #fff; margin-top: 0; font-size: 1rem;">
+                  <i class="fas fa-search me-2"></i>Tra cứu
+                </button>
+              </div>
+              
+              <div class="mt-3 p-3 rounded bg-white border" id="captcha-section">
+                <div class="d-flex align-items-center gap-2">
+                  <div class="flex-grow-1">
+                    <input type="text" name="captchaText" class="form-control mb-0" placeholder="Mã xác nhận" maxlength="6" autocomplete="off" required />
+                  </div>
+                  <div id="captcha-image" class="flex-shrink-0 rounded overflow-hidden"></div>
+                  <div class="d-flex flex-column align-items-center">
+                    <small id="captcha-timer" class="text-muted" style="font-size:0.65rem;line-height:1"></small>
+                    <button type="button" id="captcha-reload" class="btn btn-outline-secondary btn-sm flex-shrink-0" title="Đổi mã xác nhận">
+                      <i class="fas fa-sync-alt"></i>
+                    </button>
+                  </div>
+                </div>
+                <input type="hidden" name="captchaToken" id="captcha-token" value="" />
+              </div>
+              
+            </div>
+          <input type="hidden" name="__ncforminfo" value="e8vezZTiS0zTOiMoMC55Ju_-nW4QTiPmMMTr9Nyz5IwH3u4k9orZegumSvwr0byG0ogM0Ibp5bU3SmZjIZX3DVtkbHFqW5AevkDlNhM3xJ18FvUHt8LHNo1lU_JbBG1C"/></form>
+        
+
+        
+
+
+
+
+      </div>
+    </div>
+  </main>
+
+  <script src="/public/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    var captchaTimerRemaining = 120;
+    var captchaTimerInterval = null;
+    function startCaptchaTimer() {
+      if (captchaTimerInterval) clearInterval(captchaTimerInterval);
+      captchaTimerRemaining = 120;
+      var el = document.getElementById('captcha-timer');
+      el.textContent = '120s';
+      captchaTimerInterval = setInterval(function() {
+        captchaTimerRemaining--;
+        if (captchaTimerRemaining <= 0) {
+          clearInterval(captchaTimerInterval);
+          captchaTimerInterval = null;
+          el.textContent = 'Hết hạn';
+          loadCaptcha();
+        } else {
+          el.textContent = captchaTimerRemaining + 's';
+        }
+      }, 1000);
+    }
+    function loadCaptcha() {
+        fetch('/captcha/image', { cache: 'no-store' })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          document.getElementById('captcha-image').innerHTML = data.image;
+          document.getElementById('captcha-token').value = data.token;
+          startCaptchaTimer();
+        })
+        .catch(function() {
+          document.getElementById('captcha-section').innerHTML =
+            '<div class="text-danger small">Không thể tải mã xác nhận.</div>';
+        });
+    }
+    document.addEventListener('DOMContentLoaded', loadCaptcha);
+    document.getElementById('captcha-reload').addEventListener('click', loadCaptcha);
+  </script>
+  
+</body>
+</html>
