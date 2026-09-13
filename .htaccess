@@ -1,0 +1,16 @@
+RewriteEngine On
+RewriteBase /
+
+# Phục vụ file thực tế nếu tồn tại
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Định tuyến các trang chức năng
+RewriteRule ^ket-qua$ ket-qua.php [L,QSA]
+RewriteRule ^auth/login$ auth/login.php [L,QSA]
+RewriteRule ^login$ auth/login.php [L,QSA]
+RewriteRule ^captcha/image$ api/captcha.php [L,QSA]
+
+# Fallback về index.php
+RewriteRule ^$ index.php [L,QSA]
