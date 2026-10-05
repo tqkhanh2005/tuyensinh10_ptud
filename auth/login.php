@@ -3,38 +3,49 @@
  * Trang Đăng nhập Hệ thống Tuyển sinh 10 (Học sinh / Quản trị)
  */
 require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/auth.php';
 
 $pageTitle = 'Đăng nhập hệ thống - TUYỂN SINH LỚP 10';
 $activePage = 'login';
 $bodyClass = 'tw-bg-background tw-font-body tw-text-on-surface';
 
 $loginError = null;
-$loginSuccess = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $mode = $_POST['mode'] ?? 'student';
-    $captchaText = strtoupper(trim($_POST['captchaText'] ?? ''));
-    $captchaToken = trim($_POST['captchaToken'] ?? '');
-
-    $validCaptcha = false;
-    if (!empty($captchaToken) && isset($_SESSION['captchas'][$captchaToken])) {
-        $saved = $_SESSION['captchas'][$captchaToken];
-        if ($saved['expires'] >= time() && strtoupper($saved['code']) === $captchaText) {
-            $validCaptcha = true;
-        }
-        unset($_SESSION['captchas'][$captchaToken]);
-    }
-
-    if (!$validCaptcha) {
-        $loginError = 'Mã xác nhận không chính xác hoặc đã hết hạn. Vui lòng nhập lại.';
+    if (!csrf_verify($_POST['csrf_token'] ?? null)) {
+        $loginError = 'Yêu cầu không hợp lệ. Vui lòng tải lại trang và thử lại.';
     } else {
-        // Xử lý đăng nhập thành công cho demo
-        if ($mode === 'student') {
-            $cccd = trim($_POST['cccd'] ?? '');
-            $loginSuccess = 'Đăng nhập học sinh thành công (CCCD: ' . e($cccd) . ')! Hệ thống tuyển sinh lớp 10 sẵn sàng.';
+        $mode = ($_POST['mode'] ?? 'student') === 'admin' ? 'admin' : 'student';
+        $username = trim((string)($_POST['username'] ?? ''));
+        $password = (string)($_POST['password'] ?? '');
+        $captchaText = strtoupper(trim((string)($_POST['captchaText'] ?? '')));
+        $captchaToken = trim((string)($_POST['captchaToken'] ?? ''));
+
+        $validCaptcha = false;
+        if ($captchaToken !== '' && isset($_SESSION['captchas'][$captchaToken])) {
+            $saved = $_SESSION['captchas'][$captchaToken];
+            if (($saved['expires'] ?? 0) >= time() && strtoupper((string)($saved['code'] ?? '')) === $captchaText) {
+                $validCaptcha = true;
+            }
+            unset($_SESSION['captchas'][$captchaToken]);
+        }
+
+        if (!$validCaptcha) {
+            $loginError = 'Mã xác nhận không chính xác hoặc đã hết hạn. Vui lòng nhập lại.';
+        } elseif ($username === '' || $password === '') {
+            $loginError = 'Vui lòng nhập đầy đủ tên tài khoản và mật khẩu.';
         } else {
-            $username = trim($_POST['username'] ?? '');
-            $loginSuccess = 'Đăng nhập quản trị viên thành công (Tài khoản: ' . e($username) . ')!';
+            try {
+                if (auth_login($username, $password)) {
+                    // UC29 does not specify a distinct landing route per role; keep the current portal home.
+                    header('Location: ' . url('/'));
+                    exit;
+                }
+                $loginError = 'Tên tài khoản hoặc mật khẩu không chính xác.';
+            } catch (Throwable $e) {
+                error_log('Login error: ' . $e->getMessage());
+                $loginError = 'Không thể đăng nhập, vui lòng thử lại sau.';
+            }
         }
     }
 }
@@ -142,12 +153,6 @@ require __DIR__ . '/../includes/header.php';
           </div>
         <?php endif; ?>
 
-        <?php if ($loginSuccess): ?>
-          <div class="tw-mb-6 tw-p-4 tw-rounded-2xl tw-bg-green-50 tw-text-green-800 tw-text-sm tw-font-semibold tw-border tw-border-green-200">
-            <i class="fas fa-check-circle me-1"></i><?= e($loginSuccess) ?>
-          </div>
-        <?php endif; ?>
-
          <!-- Tabs -->
          <div class="tw-flex tw-mb-12 tw-border-b tw-border-outline-variant" id="loginTabs">
            <button class="tw-flex-1 tw-pb-4 tw-text-sm tw-font-bold tw-font-label tw-transition-all tw-bg-transparent tw-border-0 tw-outline-none tab-active" data-target="student">
@@ -163,18 +168,19 @@ require __DIR__ . '/../includes/header.php';
             <div class="tab-pane active" id="student">
               <form class="tw-space-y-8" method="POST" action="<?= url('/auth/login.php') ?>">
                 <input type="hidden" name="mode" value="student" />
+                <?= csrf_field() ?>
                 <div class="tw-space-y-3">
-                  <label class="tw-text-[11px] tw-font-extrabold tw-text-on-surface-variant tw-font-label tw-uppercase tw-tracking-[0.15em] tw-px-1">CCCD</label>
+                  <label class="tw-text-[11px] tw-font-extrabold tw-text-on-surface-variant tw-font-label tw-uppercase tw-tracking-[0.15em] tw-px-1">Tên tài khoản</label>
                   <div class="tw-relative tw-group">
                     <span class="material-symbols-outlined tw-absolute tw-left-4 tw-top-1/2 tw--translate-y-1/2 tw-text-on-surface-variant/40 group-focus-within:tw-text-primary tw-transition-colors">badge</span>
-                    <input name="cccd" class="tw-w-full tw-pl-12 tw-pr-4 tw-py-4 tw-rounded-[1.25rem] tw-bg-surface/50 tw-border-2 tw-border-transparent focus:tw-border-primary/20 focus:tw-ring-0 focus:tw-bg-white tw-text-on-surface tw-font-semibold tw-transition-all tw-placeholder:text-on-surface-variant/40" placeholder="Nhập 12 chữ số CCCD" type="text" required />
+                    <input name="username" class="tw-w-full tw-pl-12 tw-pr-4 tw-py-4 tw-rounded-[1.25rem] tw-bg-surface/50 tw-border-2 tw-border-transparent focus:tw-border-primary/20 focus:tw-ring-0 focus:tw-bg-white tw-text-on-surface tw-font-semibold tw-transition-all tw-placeholder:text-on-surface-variant/40" placeholder="Nhập tên tài khoản" type="text" autocomplete="username" required />
                   </div>
                 </div>
                 <div class="tw-space-y-3">
                   <label class="tw-text-[11px] tw-font-extrabold tw-text-on-surface-variant tw-font-label tw-uppercase tw-tracking-[0.15em] tw-px-1">Mật khẩu</label>
                   <div class="tw-relative tw-group">
                     <span class="material-symbols-outlined tw-absolute tw-left-4 tw-top-1/2 tw--translate-y-1/2 tw-text-on-surface-variant/40 group-focus-within:tw-text-primary tw-transition-colors">lock</span>
-                    <input name="password" class="tw-w-full tw-pl-12 tw-pr-14 tw-py-4 tw-rounded-[1.25rem] tw-bg-surface/50 tw-border-2 tw-border-transparent focus:tw-border-primary/20 focus:tw-ring-0 focus:tw-bg-white tw-text-on-surface tw-font-semibold tw-transition-all tw-placeholder:text-on-surface-variant/40" placeholder="••••••••" type="password" required />
+                    <input name="password" autocomplete="current-password" class="tw-w-full tw-pl-12 tw-pr-14 tw-py-4 tw-rounded-[1.25rem] tw-bg-surface/50 tw-border-2 tw-border-transparent focus:tw-border-primary/20 focus:tw-ring-0 focus:tw-bg-white tw-text-on-surface tw-font-semibold tw-transition-all tw-placeholder:text-on-surface-variant/40" placeholder="••••••••" type="password" required />
                     <button type="button" class="js-toggle-password tw-absolute tw-right-4 tw-top-1/2 tw--translate-y-1/2 tw-flex tw-h-9 tw-w-9 tw-items-center tw-justify-center tw-rounded-full tw-border-0 tw-bg-transparent tw-text-on-surface-variant/50 hover:tw-bg-primary/10 hover:tw-text-primary focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-primary/30 tw-transition-all" data-password-toggle="password" aria-label="Hien mat khau" title="Hien mat khau">
                       <span class="material-symbols-outlined tw-text-[20px]">visibility</span>
                     </button>
@@ -206,6 +212,7 @@ require __DIR__ . '/../includes/header.php';
            <div class="tab-pane" id="admin">
              <form class="tw-space-y-8" method="POST" action="<?= url('/auth/login.php') ?>">
                <input type="hidden" name="mode" value="admin" />
+               <?= csrf_field() ?>
                <div class="tw-space-y-3">
                  <label class="tw-text-[11px] tw-font-extrabold tw-text-on-surface-variant tw-font-label tw-uppercase tw-tracking-[0.15em] tw-px-1">Tên tài khoản</label>
                  <div class="tw-relative tw-group">
@@ -217,7 +224,7 @@ require __DIR__ . '/../includes/header.php';
                  <label class="tw-text-[11px] tw-font-extrabold tw-text-on-surface-variant tw-font-label tw-uppercase tw-tracking-[0.15em] tw-px-1">Mật khẩu</label>
                  <div class="tw-relative tw-group">
                    <span class="material-symbols-outlined tw-absolute tw-left-4 tw-top-1/2 tw--translate-y-1/2 tw-text-on-surface-variant/40 group-focus-within:tw-text-primary tw-transition-colors">lock</span>
-                   <input name="password" class="tw-w-full tw-pl-12 tw-pr-14 tw-py-4 tw-rounded-[1.25rem] tw-bg-surface/50 tw-border-2 tw-border-transparent focus:tw-border-primary/20 focus:tw-ring-0 focus:tw-bg-white tw-text-on-surface tw-font-semibold tw-transition-all tw-placeholder:text-on-surface-variant/40" placeholder="••••••••" type="password" required />
+                   <input name="password" autocomplete="current-password" class="tw-w-full tw-pl-12 tw-pr-14 tw-py-4 tw-rounded-[1.25rem] tw-bg-surface/50 tw-border-2 tw-border-transparent focus:tw-border-primary/20 focus:tw-ring-0 focus:tw-bg-white tw-text-on-surface tw-font-semibold tw-transition-all tw-placeholder:text-on-surface-variant/40" placeholder="••••••••" type="password" required />
                    <button type="button" class="js-toggle-password tw-absolute tw-right-4 tw-top-1/2 tw--translate-y-1/2 tw-flex tw-h-9 tw-w-9 tw-items-center tw-justify-center tw-rounded-full tw-border-0 tw-bg-transparent tw-text-on-surface-variant/50 hover:tw-bg-primary/10 hover:tw-text-primary focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-primary/30 tw-transition-all" data-password-toggle="password" aria-label="Hien mat khau" title="Hien mat khau">
                      <span class="material-symbols-outlined tw-text-[20px]">visibility</span>
                    </button>

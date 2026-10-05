@@ -4,7 +4,7 @@
  */
 require_once __DIR__ . '/includes/config.php';
 
-$pageTitle = 'TUYỂN SINH LỚP 10 - TP CẦN THƠ';
+$pageTitle = 'TUYỂN SINH LỚP 10';
 $activePage = 'home';
 
 require __DIR__ . '/includes/header.php';

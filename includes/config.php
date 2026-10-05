@@ -4,7 +4,19 @@
  * Cổng thông tin Tuyển sinh Lớp 10 - TP Cần Thơ
  */
 
+declare(strict_types=1);
+
 if (session_status() === PHP_SESSION_NONE) {
+    $secure = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+    ini_set('session.use_only_cookies', '1');
+    ini_set('session.use_strict_mode', '1');
+    session_set_cookie_params([
+        'lifetime' => 0,
+        'path' => '/',
+        'secure' => $secure,
+        'httponly' => true,
+        'samesite' => 'Lax',
+    ]);
     session_start();
 }
 
@@ -27,7 +39,8 @@ define('SITE_NAME', 'TUYỂN SINH LỚP 10 - TP CẦN THƠ');
 /**
  * Tạo URL tương đối tới thư mục ứng dụng
  */
-function url(string $path = ''): string {
+function url(string $path = ''): string
+{
     $cleanPath = '/' . ltrim($path, '/');
     return BASE_URL . $cleanPath;
 }
@@ -35,13 +48,15 @@ function url(string $path = ''): string {
 /**
  * Đường dẫn tài nguyên tĩnh
  */
-function asset(string $path = ''): string {
+function asset(string $path = ''): string
+{
     return url('public/' . ltrim($path, '/'));
 }
 
 /**
  * Xử lý dữ liệu tránh XSS
  */
-function e(?string $string): string {
+function e(?string $string): string
+{
     return htmlspecialchars($string ?? '', ENT_QUOTES, 'UTF-8');
 }

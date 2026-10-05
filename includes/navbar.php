@@ -4,6 +4,8 @@
  */
 $activePage = $activePage ?? 'home';
 $isHome = ($activePage === 'home');
+require_once __DIR__ . '/auth.php';
+$user = auth_user();
 ?>
 <nav class="tw-fixed tw-top-0 tw-w-full tw-z-[1000] tw-bg-white/80 tw-backdrop-blur-xl tw-shadow-md tw-h-20">
   <div class="tw-flex tw-justify-between tw-items-center tw-h-full tw-px-8 tw-max-w-7xl tw-mx-auto tw-font-headline tw-antialiased">
@@ -33,7 +35,12 @@ $isHome = ($activePage === 'home');
     </div>
     
     <div class="tw-flex tw-items-center tw-gap-4">
-      <a class="btn btn-primary btn-sm px-3 rounded-pill" href="<?= url('/auth/login.php') ?>">Đăng nhập</a>
+      <?php if ($user): ?>
+        <a class="btn btn-outline-primary btn-sm px-3 rounded-pill" href="<?= e(url('/auth/change-password.php')) ?>">Đổi mật khẩu</a>
+        <a class="btn btn-primary btn-sm px-3 rounded-pill" href="<?= e(url('/auth/logout.php')) ?>">Đăng xuất</a>
+      <?php else: ?>
+        <a class="btn btn-primary btn-sm px-3 rounded-pill" href="<?= e(url('/auth/login.php')) ?>">Đăng nhập</a>
+      <?php endif; ?>
       <?php if ($activePage !== 'ket-qua'): ?>
         <a href="<?= url('/ket-qua.php') ?>" class="tw-hidden md:tw-inline-flex tw-items-center tw-justify-center tw-text-center tw-bg-amber-700 tw-text-white hover:tw-bg-amber-800 tw-px-4 tw-py-[0.3rem] tw-rounded-full tw-font-semibold tw-text-sm tw-leading-[1.6] tw-transition-all tw-no-underline">
           Tra cứu

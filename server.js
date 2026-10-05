@@ -22,12 +22,12 @@ const phpBin = findPhpBinary();
 const routerPath = path.join(__dirname, 'router.php');
 
 console.log(`\n======================================================`);
-console.log(`🚀 Khởi động PHP Server: Tuyển sinh lớp 10 Cần Thơ`);
-console.log(`🔧 PHP Binary:  ${phpBin}`);
-console.log(`🌐 Local URL:   http://127.0.0.1:${PORT}`);
-console.log(`📄 Trang chủ:   http://127.0.0.1:${PORT}/`);
-console.log(`🔍 Tra cứu:     http://127.0.0.1:${PORT}/ket-qua`);
-console.log(`🔐 Đăng nhập:   http://127.0.0.1:${PORT}/auth/login`);
+console.log(`Khởi động PHP Server: Tuyển sinh lớp 10 Cần Thơ`);
+console.log(`PHP Binary:  ${phpBin}`);
+console.log(`Local URL:   http://127.0.0.1:${PORT}`);
+console.log(`Trang chủ:   http://127.0.0.1:${PORT}/`);
+console.log(`Tra cứu:     http://127.0.0.1:${PORT}/ket-qua`);
+console.log(`Đăng nhập:   http://127.0.0.1:${PORT}/auth/login`);
 console.log(`======================================================\n`);
 
 const phpProcess = spawn(phpBin, ['-S', `127.0.0.1:${PORT}`, routerPath], {

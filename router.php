@@ -52,8 +52,23 @@ if ($uri === '/auth/login' || $uri === '/auth/login.php' || $uri === '/login' ||
     exit;
 }
 
+if ($uri === '/auth/change-password' || $uri === '/auth/change-password.php') {
+    require __DIR__ . '/auth/change-password.php';
+    exit;
+}
+
 if ($uri === '/captcha/image' || $uri === '/api/captcha.php') {
     require __DIR__ . '/api/captcha.php';
+    exit;
+}
+
+if ($uri === '/councils' || $uri === '/councils/index') {
+    require __DIR__ . '/councils/index.php';
+    exit;
+}
+
+if ($uri === '/councils/create') {
+    require __DIR__ . '/councils/create.php';
     exit;
 }
 

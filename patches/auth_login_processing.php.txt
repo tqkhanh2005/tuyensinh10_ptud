@@ -1,0 +1,13 @@
+Giữ nguyên toàn bộ HTML/CSS/JS login hiện tại. Chỉ thay block POST demo trong auth/login.php.
+Thêm:
+require_once __DIR__ . '/../includes/auth.php';
+
+Logic:
+- kiểm tra CAPTCHA như hiện tại;
+- student: username = trim($_POST['cccd'] ?? '');
+- admin: username = trim($_POST['username'] ?? '');
+- password = (string)($_POST['password'] ?? '');
+- gọi auth_login($username,$password);
+- sai -> 'Tên đăng nhập hoặc mật khẩu không đúng.';
+- đúng -> session đã được tạo và redirect bằng url('/').
+Không hardcode tài khoản/mật khẩu. Không lưu password vào session.
