@@ -17,7 +17,7 @@ function council_type_label(string $type): string
 
 function council_list(PDO $pdo, int $periodId, ?string $type = null): array
 {
-    $sql = 'SELECT c.*, es.site_name, GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR \' | \') AS subjects
+    $sql = 'SELECT c.*, es.name AS site_name, GROUP_CONCAT(DISTINCT s.name ORDER BY s.id SEPARATOR \' | \') AS subjects
             FROM councils c
             LEFT JOIN exam_sites es ON es.id=c.exam_site_id
             LEFT JOIN council_subjects cs ON cs.council_id=c.id

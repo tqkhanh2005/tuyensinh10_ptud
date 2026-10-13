@@ -64,6 +64,13 @@ $bodyClass = $bodyClass ?? 'tw-bg-surface tw-text-on-surface';
         left: 50%;
       }
     }
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 5.5rem;
+    }
+    section[id] {
+      scroll-margin-top: 5.5rem;
+    }
     body { font-family: 'Be Vietnam Pro', sans-serif; background-color: #f8f5ff; color: #272c51; }
     .font-headline { font-family: 'Plus Jakarta Sans', sans-serif; }
     .hero-section { min-height: 85vh; }

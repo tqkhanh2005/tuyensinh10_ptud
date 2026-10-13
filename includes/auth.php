@@ -51,7 +51,9 @@ function auth_login(string $username, string $password): bool
         $s->execute(['id' => (int)$u['id']]);
     }
 
-    session_regenerate_id(true);
+    if (!headers_sent()) {
+        @session_regenerate_id(true);
+    }
     $_SESSION['auth'] = [
         'user_id' => (int)$u['id'],
         // Compatibility for existing modules that still read auth_user()['id'].
@@ -160,7 +162,7 @@ function csrf_verify(?string $token): bool
 function require_csrf(): void
 {
     if (!csrf_verify($_POST['csrf_token'] ?? $_POST['csrf'] ?? null)) {
-        http_response_code(419);
+        http_response_code(400);
         exit('Yêu cầu không hợp lệ. Vui lòng tải lại trang và thử lại.');
     }
 }

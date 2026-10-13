@@ -7,6 +7,17 @@ require_once __DIR__ . '/../includes/candidate_service.php';
 require_once __DIR__ . '/../includes/exam_service.php';
 require_permission('exam_card.view');
 $u = auth_user();
+$candRow = candidate_find_by_user((int)$u['id']);
+$candId = $candRow ? (int)$candRow['id'] : 0;
+
+// Chống IDOR: không cho phép xem thẻ dự thi thí sinh khác qua query string
+$tamperId = filter_input(INPUT_GET, 'candidate_id', FILTER_VALIDATE_INT)
+    ?: filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+if ($tamperId && $tamperId !== $candId) {
+    http_response_code(403);
+    exit('403 Forbidden: Bạn không có quyền truy cập thẻ dự thi của thí sinh khác.');
+}
+
 try {
     $candidate = exam_card_for_user(db(), (int)$u['id']);
 } catch (Throwable $e) {

@@ -60,17 +60,21 @@
   }
 
   // Search logic
-  function setupSearch(inputId, itemClass, containerId) {
+  function setupSearch(inputId, itemClass, containerId, emptyStateId) {
     const input = document.getElementById(inputId);
     if (!input) return;
+    const emptyEl = emptyStateId ? document.getElementById(emptyStateId) : null;
+
     input.addEventListener('input', function() {
       const limits = getLimits();
       const limit = containerId.includes('quota') ? limits.quota : limits.school;
       const filter = this.value.trim().toLowerCase();
       const items = document.querySelectorAll('#' + containerId + ' .' + itemClass);
-      const btnMore = document.querySelector('#' + containerId).parentElement.querySelector('button[id^="btnMore"]');
+      const containerEl = document.getElementById(containerId);
+      const btnMore = containerEl ? containerEl.parentElement.querySelector('button[id^="btnMore"]') : null;
       
       if (!filter) {
+        if (emptyEl) emptyEl.classList.add('tw-hidden');
         // Restore initial limit if no filter
         items.forEach((item, idx) => {
           if (idx < limit) {
@@ -85,14 +89,23 @@
         }
       } else {
         // Searching ignores limit
+        let visibleCount = 0;
         items.forEach(item => {
           const text = item.innerText.toLowerCase();
           if (text.includes(filter)) {
             item.classList.remove('hidden-item');
+            visibleCount++;
           } else {
             item.classList.add('hidden-item');
           }
         });
+        if (emptyEl) {
+          if (visibleCount === 0) {
+            emptyEl.classList.remove('tw-hidden');
+          } else {
+            emptyEl.classList.add('tw-hidden');
+          }
+        }
         if (btnMore) {
           btnMore.parentElement.style.display = 'none';
         }
@@ -100,9 +113,9 @@
     });
   }
 
-  setupSearch('quotaSearch', 'quota-item', 'quotaContainer');
-  setupSearch('schoolSearch', 'school-item', 'thptContainer');
-  setupSearch('schoolSearch', 'school-item', 'thcsContainer');
+  setupSearch('quotaSearch', 'quota-item', 'quotaContainer', 'quotaEmptyState');
+  setupSearch('schoolSearch', 'school-item', 'thptContainer', 'thptEmptyState');
+  setupSearch('schoolSearch', 'school-item', 'thcsContainer', 'thcsEmptyState');
 
   // Show more logic with staggered animation
   function setupShowMore(btnId, containerId, itemClass) {
@@ -187,6 +200,10 @@
       document.getElementById(targetId).classList.add('show', 'active');
       
       document.getElementById('schoolSearch').value = '';
+      const emptyThpt = document.getElementById('thptEmptyState');
+      const emptyThcs = document.getElementById('thcsEmptyState');
+      if (emptyThpt) emptyThpt.classList.add('tw-hidden');
+      if (emptyThcs) emptyThcs.classList.add('tw-hidden');
       const limits = getLimits();
       document.querySelectorAll('.school-item').forEach((item) => {
          const parentId = item.parentElement.id;

@@ -32,9 +32,52 @@ function candidate_validate(array $input): array
         $errors['email'] = 'Email không hợp lệ.';
     return [$data, $errors];
 }
-function candidate_list(): array
+function candidate_list(array $filters = []): array
 {
-    $stmt = db()->query('SELECT c.*,s.name AS middle_school_name FROM candidates c LEFT JOIN schools s ON s.id=c.middle_school_id ORDER BY c.status DESC,c.full_name,c.id');
+    $pdo = db();
+    $sql = 'SELECT c.*, s.name AS middle_school_name, s.school_code AS middle_school_code
+            FROM candidates c
+            LEFT JOIN schools s ON s.id = c.middle_school_id
+            WHERE 1=1';
+    $params = [];
+
+    $q = trim((string)($filters['q'] ?? ''));
+    if ($q !== '') {
+        $sql .= ' AND (c.national_id LIKE :q_nat OR c.full_name LIKE :q_name OR c.email LIKE :q_email OR c.phone LIKE :q_phone)';
+        $params['q_nat'] = '%' . $q . '%';
+        $params['q_name'] = '%' . $q . '%';
+        $params['q_email'] = '%' . $q . '%';
+        $params['q_phone'] = '%' . $q . '%';
+    }
+
+    $middleSchoolId = isset($filters['middle_school_id']) ? (int)$filters['middle_school_id'] : 0;
+    if ($middleSchoolId > 0) {
+        $sql .= ' AND c.middle_school_id = :middle_school_id';
+        $params['middle_school_id'] = $middleSchoolId;
+    }
+
+    $status = trim((string)($filters['status'] ?? ''));
+    if ($status === 'active' || $status === 'inactive') {
+        $sql .= ' AND c.status = :status';
+        $params['status'] = $status;
+    }
+
+    $eligible = trim((string)($filters['eligible'] ?? ''));
+    if ($eligible === '0' || $eligible === '1') {
+        $sql .= ' AND c.eligible = :eligible';
+        $params['eligible'] = (int)$eligible;
+    }
+
+    $sql .= ' ORDER BY c.status DESC, c.full_name ASC, c.id ASC';
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+    return $stmt->fetchAll();
+}
+
+function middle_schools_active_list(): array
+{
+    $stmt = db()->query('SELECT id, school_code, name FROM schools WHERE level = "THCS" AND active = 1 ORDER BY name ASC');
     return $stmt->fetchAll();
 }
 function candidate_find(int $id): ?array

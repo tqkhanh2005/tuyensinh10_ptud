@@ -1,8 +1,11 @@
 # BATCH J — IMPACT TRACE / BLOCKER STATUS
 
-# BATCH J — IMPACT TRACE / BLOCKER STATUS
-
 **Phạm vi:** đồng bộ đặc tả tài liệu theo DEC-01..09; không triển khai runtime.
+
+**Cập nhật trạng thái:** 08/10/2026. Batch I/UC03 đã đạt `46 PASS, 0 FAIL,
+0 BLOCKED`; đây là kết quả runtime độc lập và không giải quyết các blocker
+BJ-01..BJ-06. Batch G1 vẫn có TEST 11 `BLOCKED` do thiếu failure hook rollback
+hợp lệ.
 
 ## UC19 / BJ-01..03
 
@@ -62,7 +65,9 @@
 * **BJ-05:** PARTIAL — THCS/active rule đã rõ; candidate-period gap còn.
 * **BJ-06:** PARTIAL — validation points đã rõ; exception/status khi invalid tại approval còn thiếu.
 
-**Runtime:** Fresh regression NOT RUN / SAFETY BLOCKED. Documentation sync không làm thay đổi trạng thái runtim
+**Runtime:** Batch I đã có evidence `46 PASS, 0 FAIL, 0 BLOCKED`. Fresh
+regression toàn bộ suite chưa được coi là hoàn tất vì G1 TEST 11 vẫn
+`BLOCKED`. Documentation sync không làm thay đổi trạng thái runtime.
 
 ## UC19 / BJ-01..03
 
@@ -113,4 +118,5 @@ Không blocker nào được đánh dấu **RESOLVED** chỉ vì documentation �
 
 **Đặc tả:** UC13/14 cần exception/status behavior; UC19 cần historical-only behavior.
 
-**Runtime:** Fresh regression NOT RUN / SAFETY BLOCKED.
+**Runtime:** Batch I đã có evidence `46/46 PASS`; fresh regression toàn bộ suite
+chưa được coi là hoàn tất vì G1 TEST 11 vẫn `BLOCKED`.

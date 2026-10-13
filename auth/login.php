@@ -4,6 +4,7 @@
  */
 require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/portal_helper.php';
 
 $pageTitle = 'Đăng nhập hệ thống - TUYỂN SINH LỚP 10';
 $activePage = 'login';
@@ -37,8 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             try {
                 if (auth_login($username, $password)) {
-                    // UC29 does not specify a distinct landing route per role; keep the current portal home.
-                    header('Location: ' . url('/'));
+                    header('Location: ' . auth_landing_url());
                     exit;
                 }
                 $loginError = 'Tên tài khoản hoặc mật khẩu không chính xác.';

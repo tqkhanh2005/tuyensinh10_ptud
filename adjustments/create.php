@@ -1,7 +1,20 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__.'/../includes/config.php';require_once __DIR__.'/../includes/auth.php';require_once __DIR__.'/../includes/candidate_service.php';
-require_permission('adjustment.submit');$u=auth_user();$candidate=candidate_find_by_user((int)$u['id']);if(!$candidate){http_response_code(404);exit('Không tìm thấy hồ sơ.');}
+require_permission('adjustment.submit');
+$u=auth_user();
+$candidate=candidate_find_by_user((int)$u['id']);
+if(!$candidate){http_response_code(404);exit('Không tìm thấy hồ sơ.');}
+
+$tamperId = filter_input(INPUT_GET, 'candidate_id', FILTER_VALIDATE_INT)
+    ?: filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT)
+    ?: filter_input(INPUT_POST, 'candidate_id', FILTER_VALIDATE_INT)
+    ?: filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+if ($tamperId && $tamperId !== (int)$candidate['id']) {
+    http_response_code(403);
+    exit('403 Forbidden: Bạn không có quyền gửi yêu cầu điều chỉnh cho thí sinh khác.');
+}
+
 $data=$_POST;$errors=[];
 if($_SERVER['REQUEST_METHOD']==='POST'){require_csrf();$new=['national_id'=>trim((string)($_POST['national_id']??'')),'full_name'=>trim((string)($_POST['full_name']??'')),'date_of_birth'=>trim((string)($_POST['date_of_birth']??'')),'gender'=>trim((string)($_POST['gender']??'')),'address'=>trim((string)($_POST['address']??'')),'phone'=>trim((string)($_POST['phone']??'')),'email'=>trim((string)($_POST['email']??'')),'middle_school_id'=>(int)($_POST['middle_school_id']??0)];
 $reason=trim((string)($_POST['reason']??''));[$_, $errors]=candidate_validate($new);if($reason==='')$errors['reason']='Lý do không được để trống.';

@@ -15,6 +15,13 @@ if (!$candidate) {
     exit('Không tìm thấy hồ sơ thí sinh.');
 }
 
+$tamperId = filter_input(INPUT_GET, 'candidate_id', FILTER_VALIDATE_INT)
+    ?: filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+if ($tamperId && $tamperId !== (int)$candidate['id']) {
+    http_response_code(403);
+    exit('403 Forbidden: Bạn không có quyền theo dõi phúc khảo của thí sinh khác.');
+}
+
 $periodId = (int)($_GET['period_id'] ?? 0);
 $error = '';
 $rows = [];

@@ -20,17 +20,17 @@
     <div>
       <h5 class="tw-text-slate-900 dark:tw-text-white tw-font-bold tw-mb-6">Liên kết nhanh</h5>
       <ul class="tw-space-y-4 tw-text-slate-500 dark:tw-text-slate-400 tw-list-none tw-p-0">
-        <li><a class="hover:tw-underline tw-transition-all tw-no-underline tw-text-inherit" href="#">Chính sách bảo mật</a></li>
-        <li><a class="hover:tw-underline tw-transition-all tw-no-underline tw-text-inherit" href="#">Điều khoản sử dụng</a></li>
-        <li><a class="hover:tw-underline tw-transition-all tw-no-underline tw-text-inherit" href="<?= url('/#targets') ?>">Tuyển sinh</a></li>
+        <li><a class="hover:tw-underline tw-transition-all tw-no-underline tw-text-inherit" href="<?= url('/#calendar') ?>">Lịch tuyển sinh</a></li>
+        <li><a class="hover:tw-underline tw-transition-all tw-no-underline tw-text-inherit" href="<?= url('/#targets') ?>">Chỉ tiêu tuyển sinh</a></li>
+        <li><a class="hover:tw-underline tw-transition-all tw-no-underline tw-text-inherit" href="<?= url('/ket-qua.php') ?>">Tra cứu kết quả</a></li>
       </ul>
     </div>
     <div>
       <h5 class="tw-text-slate-900 dark:tw-text-white tw-font-bold tw-mb-6">Hỗ trợ</h5>
       <ul class="tw-space-y-4 tw-text-slate-500 dark:tw-text-slate-400 tw-list-none tw-p-0">
-        <li><a class="hover:tw-underline tw-transition-all tw-no-underline tw-text-inherit" href="<?= url('/#guides') ?>">Hỏi đáp (FAQ)</a></li>
-        <li><a class="hover:tw-underline tw-transition-all tw-no-underline tw-text-inherit" href="<?= url('/#schools') ?>">Liên hệ</a></li>
-        <li><a class="hover:tw-underline tw-transition-all tw-no-underline tw-text-inherit" href="<?= url('/#targets') ?>">Mạng lưới cơ sở</a></li>
+        <li><a class="hover:tw-underline tw-transition-all tw-no-underline tw-text-inherit" href="<?= url('/#guides') ?>">Hướng dẫn quy trình</a></li>
+        <li><a class="hover:tw-underline tw-transition-all tw-no-underline tw-text-inherit" href="<?= url('/#schools') ?>">Mạng lưới trường học</a></li>
+        <li><a class="hover:tw-underline tw-transition-all tw-no-underline tw-text-inherit" href="<?= url('/#tra-cuu') ?>">Cổng tra cứu điểm</a></li>
       </ul>
     </div>
   </div>

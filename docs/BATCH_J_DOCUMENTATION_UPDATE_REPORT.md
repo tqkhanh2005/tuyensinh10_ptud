@@ -68,7 +68,69 @@
 | Phase 0.9                          | **CHƯA HOÀN THÀNH**         |
 | Phase 1                            | **CHƯA CHUYỂN**              |
 
-## G. Kết luận
+## G. Runtime verification status
+
+Phần dưới đây được cập nhật sau khi chạy runtime suite trong môi trường XAMPP/MySQL
+vào ngày 08/10/2026. Kết quả này là bằng chứng kiểm thử riêng cho các batch; không
+biến các quyết định tài liệu DEC-01..09 thành triển khai runtime.
+
+| Batch | Kết quả gần nhất | Trạng thái |
+| --- | --- | --- |
+| B | 14 PASS, 0 FAIL, 0 BLOCKED | PASS |
+| C | 21 PASS, 0 FAIL, 0 BLOCKED | PASS |
+| D | 34 PASS, 0 FAIL, 0 BLOCKED | PASS |
+| E | 30 PASS, 0 FAIL, 0 BLOCKED | PASS; có SPEC_CONFLICT đã ghi nhận |
+| F | 32 PASS, 0 FAIL, 0 BLOCKED | PASS; còn warning session/header |
+| G1 | 29 PASS, 0 FAIL, 1 BLOCKED | CHƯA HOÀN TẤT; TEST 11 thiếu test hook rollback |
+| G2 | 29 PASS, 0 FAIL, 0 BLOCKED | PASS |
+| H | 22 PASS, 0 FAIL, 0 BLOCKED | PASS |
+| I | 46 PASS, 0 FAIL, 0 BLOCKED | COMPLETE |
+
+Batch I đã được kiểm tra cả service, parser CSV/XLSX và route child-process cho
+auth/upload/confirm. Kiểm thử browser/manual với dữ liệu appeal thực tế được
+**DEFERRED**, không phải lỗi runtime.
+
+Lệnh chạy một batch:
+
+```powershell
+Set-Location 'C:\xampp\htdocs\tuyensinh10_ptud_copy'
+& 'C:\xampp\php\php.exe' '.\tests\batchI_runtime.php'
+```
+
+Kết quả chấp nhận cho Batch I:
+
+```text
+TOTAL: 46 PASS: 46 FAIL: 0 BLOCKED: 0
+Protected triggers present: YES
+```
+
+Lệnh chạy toàn bộ runtime suite:
+
+```powershell
+Get-ChildItem '.\tests\batch*_runtime.php' |
+    Sort-Object Name |
+    ForEach-Object {
+        & 'C:\xampp\php\php.exe' $_.FullName
+        if ($LASTEXITCODE -ne 0) { throw "FAILED: $($_.Name)" }
+    }
+```
+
+Overall runtime suite hiện **chưa hoàn tất tuyệt đối** vì G1 TEST 11 vẫn
+`BLOCKED` do chưa có failure hook hợp lệ cho rollback bên trong
+`adjustment_review()`.
+
+## H. Phạm vi và việc còn lại
+
+Batch J chỉ là documentation sync. Không được hiểu rằng các quy tắc DEC-01..09
+đã được triển khai trong production. Việc tiếp theo được xếp theo thứ tự:
+
+1. Bổ sung test hook hợp lệ cho G1 TEST 11, không hack production.
+2. Chạy lại toàn bộ runtime suite và xử lý warning session/header.
+3. Thực hiện manual/browser smoke test UC03 khi có fixture appeal ở trạng thái
+   `grading`.
+4. Chỉ sau khi có đặc tả bổ sung mới triển khai các gap UC19, UC13–14 và UC18.
+
+## I. Kết luận
 
 Batch J đã thực hiện đồng bộ tài liệu theo DEC-01..09 trong phạm vi tài liệu. Việc đồng bộ  **không đồng nghĩa nghiệp vụ đã được triển khai runtime** , và không làm giảm các blocker BJ-01..BJ-06. Fresh regression chưa chạy và không được đánh dấu PASS.
 

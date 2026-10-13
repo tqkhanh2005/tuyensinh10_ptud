@@ -10,6 +10,15 @@ $user = auth_user();
 $candidate = candidate_for_current_user($pdo, (int)$user['user_id']);
 if (!$candidate) { http_response_code(404); exit('Không tìm thấy hồ sơ thí sinh.'); }
 
+$tamperId = filter_input(INPUT_GET, 'candidate_id', FILTER_VALIDATE_INT)
+    ?: filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT)
+    ?: filter_input(INPUT_POST, 'candidate_id', FILTER_VALIDATE_INT)
+    ?: filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+if ($tamperId && $tamperId !== (int)$candidate['id']) {
+    http_response_code(403);
+    exit('403 Forbidden: Bạn không có quyền đăng ký phúc khảo cho thí sinh khác.');
+}
+
 $periodId = (int)($_GET['period_id'] ?? $_POST['period_id'] ?? 0);
 $error = '';
 $message = '';
@@ -21,7 +30,7 @@ if ($periodId > 0) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!csrf_verify($_POST['csrf'] ?? null)) { http_response_code(419); exit('CSRF token không hợp lệ.'); }
+    if (!csrf_verify($_POST['csrf_token'] ?? $_POST['csrf'] ?? null)) { http_response_code(419); exit('CSRF token không hợp lệ.'); }
     try {
         $id = create_appeal($pdo, (int)$candidate['id'], $periodId, (int)($_POST['subject_id'] ?? 0), (string)($_POST['reason'] ?? ''));
         $message = 'Đăng ký phúc khảo thành công. Mã yêu cầu: #'.$id.'. Trạng thái: Chờ xử lý.';

@@ -7,6 +7,15 @@ require_once __DIR__.'/../includes/admission_service.php';
 require_permission('enrollment.confirm');
 $u=auth_user();$candidate=candidate_find_by_user((int)$u['id']);
 if(!$candidate){http_response_code(404);exit('Không tìm thấy thông tin hồ sơ.');}
+
+$tamperId = filter_input(INPUT_GET, 'candidate_id', FILTER_VALIDATE_INT)
+    ?: filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT)
+    ?: filter_input(INPUT_POST, 'candidate_id', FILTER_VALIDATE_INT)
+    ?: filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+if ($tamperId && $tamperId !== (int)$candidate['id']) {
+    http_response_code(403);
+    exit('403 Forbidden: Bạn không có quyền xác nhận nhập học cho thí sinh khác.');
+}
 $pdo=db();$periods=$pdo->query('SELECT * FROM admission_periods ORDER BY academic_year DESC,id DESC')->fetchAll();
 $periodId=(int)($_POST['period_id']??$_GET['period_id']??($periods[0]['id']??0));$error='';$success='';
 if($_SERVER['REQUEST_METHOD']==='POST'){

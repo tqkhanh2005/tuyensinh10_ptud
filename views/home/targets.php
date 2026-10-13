@@ -20,7 +20,21 @@ $quotas = require __DIR__ . '/../../data/quotas.php';
       </div>
     </div>
     
+<?php
+// Filter out test records
+$quotas = array_values(array_filter($quotas ?? [], function($q) {
+  $name = strtoupper((string)($q['name'] ?? ''));
+  return !str_starts_with($name, 'BATCH') && !str_starts_with($name, 'BTEST') && !str_starts_with($name, 'G1_');
+}));
+?>
     <div id="quotaContainer" class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-6 tw-mb-12">
+      <!-- Empty state khi tìm kiếm không có kết quả -->
+      <div id="quotaEmptyState" class="tw-hidden tw-col-span-full tw-text-center tw-py-12 tw-bg-surface-container-lowest tw-rounded-2xl tw-border tw-border-dashed tw-border-outline-variant">
+        <span class="material-symbols-outlined tw-text-4xl tw-text-outline tw-mb-2">search_off</span>
+        <p class="tw-text-on-surface-variant tw-font-medium">Không tìm thấy chỉ tiêu phù hợp</p>
+        <p class="tw-text-xs tw-text-outline">Vui lòng thử lại với tên trường học khác.</p>
+      </div>
+
       <?php foreach ($quotas as $idx => $quota): ?>
         <div class="quota-item tw-bg-surface-container-lowest tw-p-6 tw-rounded-2xl tw-shadow-md tw-border tw-border-outline-variant/20 hover:tw-border-primary/30 hover:tw-shadow-xl hover:tw--translate-y-1 tw-transition-all reveal <?= $idx >= 6 ? 'hidden-item' : '' ?>" data-name="<?= e($quota['data_name']) ?>">
           <div class="tw-flex tw-justify-between tw-items-start tw-mb-4">

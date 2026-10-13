@@ -17,6 +17,16 @@ if (!$candidate) {
     exit('Không tìm thấy hồ sơ.');
 }
 
+// Chống IDOR: không cho phép xem hoặc sửa nguyện vọng thí sinh khác
+$tamperId = filter_input(INPUT_GET, 'candidate_id', FILTER_VALIDATE_INT)
+    ?: filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT)
+    ?: filter_input(INPUT_POST, 'candidate_id', FILTER_VALIDATE_INT)
+    ?: filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+if ($tamperId && $tamperId !== (int)$candidate['id']) {
+    http_response_code(403);
+    exit('403 Forbidden: Bạn không có quyền truy cập hoặc chỉnh sửa nguyện vọng của thí sinh khác.');
+}
+
 $pdo = db();
 
 $periods = admission_period_list($pdo);

@@ -3,8 +3,46 @@
  * Home View: Schools Network Section
  */
 $schools = require __DIR__ . '/../../data/schools.php';
-$thptSchools = $schools['thpt'];
-$thcsSchools = $schools['thcs'];
+$thptSchools = array_values(array_filter($schools['thpt'] ?? [], function($s) {
+    $name = strtoupper((string)($s['name'] ?? ''));
+    return !str_starts_with($name, 'BATCH') && !str_starts_with($name, 'BTEST') && !str_starts_with($name, 'G1_');
+}));
+$thcsSchools = array_values(array_filter($schools['thcs'] ?? [], function($s) {
+    $name = strtoupper((string)($s['name'] ?? ''));
+    return !str_starts_with($name, 'BATCH') && !str_starts_with($name, 'BTEST') && !str_starts_with($name, 'G1_');
+}));
+
+// Query DB for any registered active schools (excluding test batches)
+try {
+    if (function_exists('db')) {
+        $pdo = db();
+        $dbStmt = $pdo->query("SELECT school_code, name, level, address, phone, email FROM schools WHERE active = 1 AND name NOT LIKE 'BATCH%' AND name NOT LIKE 'Batch%' AND name NOT LIKE 'G1_%' AND school_code NOT LIKE 'BATCH%' AND school_code NOT LIKE 'BTEST%' AND school_code NOT LIKE 'G1_%'");
+        $existingThptNames = array_column($thptSchools, 'name');
+        $existingThcsNames = array_column($thcsSchools, 'name');
+
+        while ($row = $dbStmt->fetch(PDO::FETCH_ASSOC)) {
+            $newItem = [
+                'name' => $row['name'],
+                'data_name' => mb_strtolower($row['name'], 'UTF-8'),
+                'data_address' => mb_strtolower($row['address'] ?? '', 'UTF-8'),
+                'badge' => $row['level'] === 'THPT' ? 'Cơ sở THPT' : 'Cơ sở THCS',
+                'image' => 'https://lh3.googleusercontent.com/aida-public/AB6AXuC1KutJOcTJ56rPM3hzCvo1bSgpqWfGE5G3DsZb75npXoyG9YSda6kOs4iE6DPUCyFmXx33ukewSEsruOpdurqhNWlrEUU_aH70fn8B3Y7u8bLktXONlv1sPpfsISPyvTdktwMtaZoO7wPfIoYP1hZvmmTZ4R4Nqde0Opi8iuCRb2zQg4uQf69-gEeRCulM9KFiegbmiYSjCBOhoPwCXHryflseGggaEkWbcMfuzxXfvAQv6yOGBfSR3ypjM3xyeJQOjrPelk9LI4WJ',
+                'address' => $row['address'] ?? '',
+                'phone' => $row['phone'] ?? '',
+                'website' => null,
+                'zalo' => '#',
+                'video' => null
+            ];
+            if ($row['level'] === 'THPT' && !in_array($row['name'], $existingThptNames, true)) {
+                $thptSchools[] = $newItem;
+            } elseif ($row['level'] === 'THCS' && !in_array($row['name'], $existingThcsNames, true)) {
+                $thcsSchools[] = $newItem;
+            }
+        }
+    }
+} catch (Throwable $e) {
+    // Fail silently to prevent leaking SQL error / server paths to public visitors
+}
 ?>
 <!-- School Network -->
 <section id="schools" class="tw-py-24 tw-px-8 tw-max-w-7xl tw-mx-auto tw-bg-surface">
@@ -31,6 +69,13 @@ $thcsSchools = $schools['thcs'];
     <!-- Khối THPT -->
     <div class="tab-pane fade show active" id="thpt-content" role="tabpanel">
       <div id="thptContainer" class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-8">
+        <!-- Empty state khi tìm kiếm không có kết quả -->
+        <div id="thptEmptyState" class="tw-hidden tw-col-span-full tw-text-center tw-py-12 tw-bg-surface-container-lowest tw-rounded-2xl tw-border tw-border-dashed tw-border-outline-variant">
+          <span class="material-symbols-outlined tw-text-4xl tw-text-outline tw-mb-2">search_off</span>
+          <p class="tw-text-on-surface-variant tw-font-medium">Không tìm thấy trường THPT phù hợp</p>
+          <p class="tw-text-xs tw-text-outline">Vui lòng thử lại với tên cơ sở hoặc địa chỉ khác.</p>
+        </div>
+
         <?php foreach ($thptSchools as $idx => $school): ?>
           <div class="school-item tw-bg-surface-container-lowest tw-rounded-2xl tw-overflow-hidden tw-shadow-md hover:tw-shadow-2xl hover:tw--translate-y-2 tw-transition-all tw-border tw-border-surface-container-high reveal <?= $idx >= 3 ? 'hidden-item' : '' ?>" data-name="<?= e($school['data_name']) ?>" data-address="<?= e($school['data_address']) ?>">
             <div class="tw-h-48 tw-relative tw-overflow-hidden tw-bg-slate-200">
@@ -84,6 +129,13 @@ $thcsSchools = $schools['thcs'];
     <!-- Khối THCS -->
     <div class="tab-pane fade" id="thcs-content" role="tabpanel">
       <div id="thcsContainer" class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-8">
+        <!-- Empty state khi tìm kiếm không có kết quả -->
+        <div id="thcsEmptyState" class="tw-hidden tw-col-span-full tw-text-center tw-py-12 tw-bg-surface-container-lowest tw-rounded-2xl tw-border tw-border-dashed tw-border-outline-variant">
+          <span class="material-symbols-outlined tw-text-4xl tw-text-outline tw-mb-2">search_off</span>
+          <p class="tw-text-on-surface-variant tw-font-medium">Không tìm thấy trường THCS phù hợp</p>
+          <p class="tw-text-xs tw-text-outline">Vui lòng thử lại với tên cơ sở hoặc địa chỉ khác.</p>
+        </div>
+
         <?php foreach ($thcsSchools as $idx => $school): ?>
           <div class="school-item tw-bg-surface-container-lowest tw-rounded-2xl tw-overflow-hidden tw-shadow-md hover:tw-shadow-2xl hover:tw--translate-y-2 tw-transition-all tw-border tw-border-surface-container-high reveal <?= $idx >= 3 ? 'hidden-item' : '' ?>" data-name="<?= e($school['data_name']) ?>" data-address="<?= e($school['data_address']) ?>">
             <div class="tw-h-48 tw-relative tw-overflow-hidden tw-bg-slate-200">
