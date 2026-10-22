@@ -108,8 +108,41 @@ function school_update(PDO $pdo, int $id, array $data): void
 
 function school_delete(PDO $pdo, int $id): void
 {
-    $stmt = $pdo->prepare('DELETE FROM schools WHERE id = :id');
-    $stmt->execute(['id' => $id]);
+    $pdo->beginTransaction();
+    try {
+        $lock = $pdo->prepare('SELECT id FROM schools WHERE id = ? FOR UPDATE');
+        $lock->execute([$id]);
+        if ($lock->fetchColumn() === false) {
+            throw new OutOfBoundsException('Không tìm thấy trường học. Trường có thể đã bị xóa.');
+        }
+        // Check every school FK in the supplied schema, including SET NULL links.
+        // Historical links are also retained; deleting them would alter related records.
+        $references = [
+            'admission_quotas' => 'school_id',
+            'admission_results' => 'school_id',
+            'aspirations' => 'school_id',
+            'candidates' => 'middle_school_id',
+            'enrollment_confirmations' => 'school_id',
+            'exam_sites' => 'school_id',
+            'staff' => 'school_id',
+        ];
+        foreach ($references as $table => $column) {
+            $check = $pdo->prepare("SELECT $column FROM $table WHERE $column = ? LIMIT 1 FOR UPDATE");
+            $check->execute([$id]);
+            if ($check->fetchColumn() !== false) {
+                throw new DomainException('Không thể xóa trường đang có dữ liệu liên quan');
+            }
+        }
+        $stmt = $pdo->prepare('DELETE FROM schools WHERE id = :id');
+        $stmt->execute(['id' => $id]);
+        $pdo->commit();
+    } catch (Throwable $e) {
+        if ($pdo->inTransaction()) $pdo->rollBack();
+        if ($e instanceof PDOException && (int)($e->errorInfo[1] ?? 0) === 1451) {
+            throw new DomainException('Không thể xóa trường đang có dữ liệu liên quan', 0, $e);
+        }
+        throw $e;
+    }
 }
 
 function admission_period_list(PDO $pdo): array

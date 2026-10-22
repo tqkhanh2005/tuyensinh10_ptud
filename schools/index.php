@@ -13,6 +13,8 @@ $area = trim((string)($_GET['area'] ?? ''));
 
 $schools = [];
 $error = '';
+$deleteError = $_SESSION['school_delete_error'] ?? '';
+unset($_SESSION['school_delete_error']);
 try {
     $pdo = db();
     $schools = school_list($pdo, $q, $level, $area);
@@ -59,6 +61,9 @@ admin_layout_start('Quản lý trường học', 'schools', ['Quản lý trườ
 
   <?php if ($error): ?>
     <div class="alert alert-danger mb-4"><?= e($error) ?></div>
+  <?php endif; ?>
+  <?php if ($deleteError !== ''): ?>
+    <div class="alert alert-danger mb-4" role="alert"><?= e($deleteError) ?></div>
   <?php endif; ?>
 
   <!-- Bộ lọc tìm kiếm -->

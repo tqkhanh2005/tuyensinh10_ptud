@@ -266,6 +266,10 @@ function excel_parse_xlsx(string $path): array
             while (count($cells) < $col - 1) $cells[] = '';
             $v = (string)($cell->v ?? '');
             if ((string)$cell['t'] === 's') $v = $shared[(int)$v] ?? '';
+            if ((string)$cell['t'] === 'inlineStr') {
+                $cell->registerXPathNamespace('m', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main');
+                $v = implode('', array_map('strval', $cell->xpath('./m:is//m:t') ?: []));
+            }
             $cells[] = trim($v);
         }
         $rows[] = $cells;
