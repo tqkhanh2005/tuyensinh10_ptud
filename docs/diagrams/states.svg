@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="480" height="290" preserveAspectRatio="xMinYMin meet" viewBox="0 0 480 290" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="480" height="290"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-290)" style="clip-path: url(#clip)">
+		<g transform="">
+			<text x="0" y="275" style="font-family: TNR-Bold; font-size: 12px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,550) scale(1,-1)">Kỳ tuyển sinh</text>
+			<rect x="0" y="215" width="140" height="42" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="57.160400390625" y="241" style="font-family: TNR-Bold; font-size: 11px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,482) scale(1,-1)">Nháp</text>
+			<rect x="170" y="215" width="140" height="42" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="220.285400390625" y="241" style="font-family: TNR-Bold; font-size: 11px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,482) scale(1,-1)">Công bố</text>
+			<rect x="340" y="215" width="140" height="42" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="397.46923828125" y="241" style="font-family: TNR-Bold; font-size: 11px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,482) scale(1,-1)">Đóng</text>
+			<path d="M 140,236 L 170,236 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="170 236, 165.6121 238.3971, 165.6121 233.6029" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+			<path d="M 310,236 L 340,236 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="340 236, 335.6121 238.3971, 335.6121 233.6029" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+			<text x="0" y="184" style="font-family: TNR-Bold; font-size: 12px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,368) scale(1,-1)">Lượt xét tuyển mô phỏng</text>
+			<rect x="0" y="109" width="140" height="53" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="52.11962890625" y="146" style="font-family: TNR-Bold; font-size: 11px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,292) scale(1,-1)">Bị chặn</text>
+			<text x="32.1484375" y="127.0" style="font-family: TNR; font-size: 9.5px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,254) scale(1,-1)">blocked; cần rà soát</text>
+			<rect x="170" y="109" width="140" height="53" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="209.741943359375" y="146" style="font-family: TNR-Bold; font-size: 11px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,292) scale(1,-1)">Đã tính xong</text>
+			<text x="220.74951171875" y="127.0" style="font-family: TNR; font-size: 9.5px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,254) scale(1,-1)">calculated</text>
+			<rect x="340" y="109" width="140" height="53" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="382.497314453125" y="146" style="font-family: TNR-Bold; font-size: 11px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,292) scale(1,-1)">Đã hoàn tất</text>
+			<text x="370.0355224609375" y="127.0" style="font-family: TNR; font-size: 9.5px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,254) scale(1,-1)">finalized; đã công bố</text>
+			<path d="M 140,135 L 170,135 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="170 135, 165.6121 137.3971, 165.6121 132.6029" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+			<text x="137.87841796875" y="151" style="font-family: TNR; font-size: 9px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,302) scale(1,-1)">Chạy lại</text>
+			<path d="M 310,135 L 340,135 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="340 135, 335.6121 137.3971, 335.6121 132.6029" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+			<text x="293.34228515625" y="91" style="font-family: TNR; font-size: 10px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,182) scale(1,-1)">Duyệt bản chụp</text>
+			<text x="302.2265625" y="78" style="font-family: TNR; font-size: 10px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,156) scale(1,-1)">rồi công bố</text>
+			<text x="0" y="59" style="font-family: TNR; font-size: 11px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,118) scale(1,-1)">Mốc duyệt lưu ở reviewed_at; không thêm trạng thái run mới.</text>
+			<text x="0" y="37" style="font-family: TNR; font-size: 11px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,74) scale(1,-1)">Công bố điểm và phát hành phiếu là các mốc độc lập.</text>
+		</g>
+	</g>
+</svg>

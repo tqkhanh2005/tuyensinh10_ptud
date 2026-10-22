@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="480" height="370" preserveAspectRatio="xMinYMin meet" viewBox="0 0 480 370" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="480" height="370"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-370)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="5" y="327" width="110" height="35" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="39.36962890625" y="346" style="font-family: TNR-Bold; font-size: 11px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,692) scale(1,-1)">Học sinh</text>
+			<path d="M 60,15 L 60,327 Z" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; stroke-dasharray: 3, 3;"/>
+			<rect x="185" y="327" width="110" height="35" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="198.8896484375" y="346" style="font-family: TNR-Bold; font-size: 11px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,692) scale(1,-1)">Dịch vụ nhập học</text>
+			<path d="M 240,15 L 240,327 Z" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; stroke-dasharray: 3, 3;"/>
+			<rect x="365" y="327" width="110" height="35" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="405.328857421875" y="346" style="font-family: TNR-Bold; font-size: 11px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,692) scale(1,-1)">CSDL</text>
+			<path d="M 420,15 L 420,327 Z" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; stroke-dasharray: 3, 3;"/>
+			<path d="M 60,301 L 240,301 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="240 301, 235.6121 303.3971, 235.6121 298.6029" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+			<text x="108.3134765625" y="310" style="font-family: TNR; font-size: 9px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,620) scale(1,-1)">Gửi xác nhận và CSRF</text>
+			<path d="M 240,267 L 420,267 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="420 267, 415.6121 269.3971, 415.6121 264.6029" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+			<text x="287.388427734375" y="276" style="font-family: TNR; font-size: 9px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,552) scale(1,-1)">Khóa kỳ và đọc kết quả</text>
+			<path d="M 420,233 L 240,233 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="240 233, 244.3879 230.6029, 244.3879 235.3971" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+			<text x="270.640869140625" y="242" style="font-family: TNR; font-size: 9px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,484) scale(1,-1)">Kết quả công bố, bản chụp duyệt</text>
+			<path d="M 240,199 L 420,199 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="420 199, 415.6121 201.3971, 415.6121 196.6029" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+			<text x="269.513671875" y="208" style="font-family: TNR; font-size: 9px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,416) scale(1,-1)">Ghi biên nhận, trạng thái, nhật ký</text>
+			<path d="M 420,165 L 240,165 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="240 165, 244.3879 162.6029, 244.3879 167.3971" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+			<text x="286.377685546875" y="174" style="font-family: TNR; font-size: 9px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,348) scale(1,-1)">Commit cùng thông báo</text>
+			<path d="M 240,131 L 60,131 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="60 131, 64.38791 128.6029, 64.38791 133.3971" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+			<text x="98.0126953125" y="140" style="font-family: TNR; font-size: 9px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,280) scale(1,-1)">Chuyển trang xem biên nhận</text>
+			<path d="M 60,97 L 240,97 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="240 97, 235.6121 99.39713, 235.6121 94.60287" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+			<text x="112.573974609375" y="106" style="font-family: TNR; font-size: 9px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,212) scale(1,-1)">Gửi lại cùng yêu cầu</text>
+			<path d="M 240,63 L 420,63 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="420 63, 415.6121 65.39713, 415.6121 60.60287" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+			<text x="287.390625" y="72" style="font-family: TNR; font-size: 9px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,144) scale(1,-1)">Đọc xác nhận đã tồn tại</text>
+			<path d="M 240,29 L 60,29 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="60 29, 64.38791 26.60287, 64.38791 31.39713" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+			<text x="108.01025390625" y="38" style="font-family: TNR; font-size: 9px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,76) scale(1,-1)">Trả mã và thời điểm cũ</text>
+		</g>
+	</g>
+</svg>

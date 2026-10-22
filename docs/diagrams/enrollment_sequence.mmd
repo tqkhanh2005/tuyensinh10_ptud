@@ -1,0 +1,14 @@
+sequenceDiagram
+  actor S as Học sinh
+  participant E as Dịch vụ nhập học
+  participant D as CSDL
+  S->>E: Gửi xác nhận và CSRF
+  E->>D: Khóa kỳ và đọc hồ sơ kết quả
+  D-->>E: Lượt finalized đã công bố và bản chụp duyệt
+  E->>E: Kiểm tra chính chủ thời hạn và tính nhất quán
+  E->>D: Ghi biên nhận trạng thái nhật ký thông báo
+  D-->>E: Commit
+  E-->>S: Chuyển trang xem biên nhận
+  S->>E: Gửi lại
+  E->>D: Đọc xác nhận đã tồn tại
+  E-->>S: Cùng mã và thời điểm cũ

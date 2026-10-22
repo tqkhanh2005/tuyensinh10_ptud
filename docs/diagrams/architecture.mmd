@@ -1,0 +1,5 @@
+flowchart TB
+  B[Trình duyệt theo vai trò] --> C[Trang PHP xác thực quyền CSRF]
+  C --> S[Hàm dịch vụ trong includes]
+  S --> D[(MySQL hoặc MariaDB qua PDO)]
+  N[server.js chỉ khởi động PHP cục bộ] -.-> C

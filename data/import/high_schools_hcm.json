@@ -1,0 +1,5 @@
+[
+  {"school_code":"THPT_NGUYEN_THI_MINH_KHAI","name":"Trường THPT Nguyễn Thị Minh Khai","address":"275 Điện Biên Phủ, Phường Xuân Hòa, TP.HCM","district":"Phường Xuân Hòa","phone":"02839330801","email":"thpt.hcm@minhkhai.edu.vn","source":"https://thptnguyenthiminhkhai.hcm.edu.vn/","verified_on":"2026-10-18","code_kind":"internal"},
+  {"school_code":"THPT_TRAN_PHU","name":"Trường THPT Trần Phú","address":"18 Lê Thúc Hoạch, Phường Phú Thọ Hòa, TP.HCM","district":"Phường Phú Thọ Hòa","phone":"02838658727","email":"c3tranphu.tphcm@moet.edu.vn","source":"https://thpttranphu.hcm.edu.vn/","verified_on":"2026-10-18","code_kind":"internal"},
+  {"school_code":"THPT_MARIE_CURIE","name":"Trường THPT Marie Curie","address":"159 Nam Kỳ Khởi Nghĩa, Phường Xuân Hòa, TP.HCM","district":"Phường Xuân Hòa","phone":"02839306989","email":"c3mariecurie.tphcm@moet.edu.vn","source":"https://thptmariecurie.hcm.edu.vn/","verified_on":"2026-10-18","code_kind":"internal"}
+]

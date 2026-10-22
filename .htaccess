@@ -1,0 +1,22 @@
+RewriteEngine On
+
+# Keep maintenance tools, source data and database dumps outside public HTTP access.
+Options -Indexes
+RewriteRule (^|/)\. - [F,L]
+RewriteRule ^(?:database|tests|scratch|includes|data|docs|outputs|node_modules|vendor|_ai_source|archive)(?:/|$) - [F,L,NC]
+RewriteRule \.(?:sql|bak|log|ini|toml|md|lock)$ - [F,L,NC]
+RewriteRule ^(?:package(?:-lock)?|composer)\.json$ - [F,L,NC]
+
+# Neu la file hoac thu muc ton tai thuc te thi bo qua
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Dinh tuyen cac trang chuc nang (khong dung RewriteBase / de tranh loi thu muc con)
+RewriteRule ^ket-qua/?$ ket-qua.php [L,QSA]
+RewriteRule ^auth/login/?$ auth/login.php [L,QSA]
+RewriteRule ^login/?$ auth/login.php [L,QSA]
+RewriteRule ^captcha/image/?$ api/captcha.php [L,QSA]
+
+# Fallback ve index.php
+RewriteRule ^$ index.php [L,QSA]

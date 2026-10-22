@@ -1,0 +1,9 @@
+flowchart TB
+  subgraph KY[Kỳ tuyển sinh]
+    D[Nháp draft] --> P[Công bố published] --> C[Đóng closed]
+  end
+  subgraph RUN[Lượt xét tuyển mô phỏng]
+    B[Bị chặn blocked] -->|Biên bản và chạy lại| K[Đã tính calculated]
+    K -->|Duyệt bản chụp rồi công bố| F[Hoàn tất finalized]
+  end
+  N[reviewed_at thuộc bản chụp không phải trạng thái của run]

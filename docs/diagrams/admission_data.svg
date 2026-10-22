@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="480" height="335" preserveAspectRatio="xMinYMin meet" viewBox="0 0 480 335" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="480" height="335"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-335)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="265" width="140" height="55" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="31.8578125" y="301.0" style="font-family: TNR-Bold; font-size: 9.6px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,602) scale(1,-1)">admission_periods</text>
+			<text x="60.31416015625" y="280.0" style="font-family: TNR; font-size: 8.4px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,560) scale(1,-1)">PK id</text>
+			<rect x="170" y="265" width="140" height="55" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="207.721875" y="301.0" style="font-family: TNR-Bold; font-size: 9.6px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,602) scale(1,-1)">admission_runs</text>
+			<text x="198.35068359374998" y="280.0" style="font-family: TNR; font-size: 8.4px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,560) scale(1,-1)">FK admission_period_id</text>
+			<rect x="0" y="160" width="140" height="55" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="55.33046875" y="196.0" style="font-family: TNR-Bold; font-size: 9.6px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,392) scale(1,-1)">schools</text>
+			<text x="60.31416015625" y="175.0" style="font-family: TNR; font-size: 8.4px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,350) scale(1,-1)">PK id</text>
+			<rect x="170" y="160" width="140" height="55" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="217.32890625" y="196.0" style="font-family: TNR-Bold; font-size: 9.6px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,392) scale(1,-1)">aspirations</text>
+			<text x="191.59541015624998" y="175.0" style="font-family: TNR; font-size: 8.4px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,350) scale(1,-1)">FK period, candidate, school</text>
+			<rect x="340" y="160" width="140" height="55" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="373.4609375" y="196.0" style="font-family: TNR-Bold; font-size: 9.6px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,392) scale(1,-1)">admission_results</text>
+			<text x="361.1298828125" y="175.0" style="font-family: TNR; font-size: 8.4px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,350) scale(1,-1)">FK run, aspiration, candidate</text>
+			<rect x="0" y="45" width="140" height="55" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="48.130468750000006" y="81.0" style="font-family: TNR-Bold; font-size: 9.6px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,162) scale(1,-1)">candidates</text>
+			<text x="19.01962890624999" y="60.0" style="font-family: TNR; font-size: 8.4px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,120) scale(1,-1)">FK user_id, middle_school_id</text>
+			<rect x="170" y="45" width="140" height="55" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="187.17890625" y="81.0" style="font-family: TNR-Bold; font-size: 9.6px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,162) scale(1,-1)">admission_run_snapshots</text>
+			<text x="192.0486328125" y="60.0" style="font-family: TNR; font-size: 8.4px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,120) scale(1,-1)">PK và FK admission_run_id</text>
+			<rect x="340" y="45" width="140" height="55" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="356.675" y="81.0" style="font-family: TNR-Bold; font-size: 9.6px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,162) scale(1,-1)">enrollment_confirmations</text>
+			<text x="363.2298828125" y="60.0" style="font-family: TNR; font-size: 8.4px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,120) scale(1,-1)">FK result, period, candidate</text>
+			<path d="M 140,293 L 170,293 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="170 293, 165.6121 295.3971, 165.6121 290.6029" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+			<text x="146.0" y="305" style="font-family: TNR; font-size: 9px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,610) scale(1,-1)">1 : N</text>
+			<path d="M 70,265 L 70,240 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<path d="M 70,240 L 240,240 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<path d="M 240,240 L 240,215 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="240 215, 242.3971 219.3879, 237.6029 219.3879" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+			<text x="147.0" y="244" style="font-family: TNR; font-size: 9px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,488) scale(1,-1)">1 : N</text>
+			<path d="M 140,187 L 170,187 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="170 187, 165.6121 189.3971, 165.6121 184.6029" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+			<text x="146.0" y="199" style="font-family: TNR; font-size: 9px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,398) scale(1,-1)">1 : N</text>
+			<path d="M 310,187 L 340,187 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="340 187, 335.6121 189.3971, 335.6121 184.6029" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+			<text x="316.0" y="199" style="font-family: TNR; font-size: 9px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,398) scale(1,-1)">1 : N</text>
+			<path d="M 310,286 L 410,286 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<path d="M 410,286 L 410,215 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="410 215, 412.3971 219.3879, 407.6029 219.3879" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+			<text x="388.0" y="292" style="font-family: TNR; font-size: 9px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,584) scale(1,-1)">1 : N</text>
+			<path d="M 140,72 L 155,72 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<path d="M 155,72 L 155,137 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<path d="M 155,137 L 240,137 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<path d="M 240,137 L 240,160 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="240 160, 237.6029 155.6121, 242.3971 155.6121" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+			<text x="188.0" y="124" style="font-family: TNR; font-size: 9px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,248) scale(1,-1)">1 : N</text>
+			<path d="M 310,278 L 326,278 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<path d="M 326,278 L 326,72 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<path d="M 326,72 L 310,72 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="310 72, 314.3879 69.60287, 314.3879 74.39713" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+			<text x="311.999755859375" y="111" style="font-family: TNR; font-size: 9px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,222) scale(1,-1)">1 : 1</text>
+			<path d="M 410,160 L 410,100 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="410 100, 412.3971 104.3879, 407.6029 104.3879" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+			<text x="424.499755859375" y="125" style="font-family: TNR; font-size: 9px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,250) scale(1,-1)">1 : 0..1</text>
+			<text x="120.3662109375" y="18" style="font-family: TNR; font-size: 10px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,36) scale(1,-1)">Quan hệ chính được chọn; không biểu diễn toàn bộ 47 bảng</text>
+		</g>
+	</g>
+</svg>

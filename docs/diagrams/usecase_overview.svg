@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="480" height="325" preserveAspectRatio="xMinYMin meet" viewBox="0 0 480 325" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="480" height="325"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-325)" style="clip-path: url(#clip)">
+		<g transform="">
+			<circle cx="54" cy="301" r="5" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<path d="M 54,296 L 54,279 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1;"/>
+			<path d="M 42,289 L 66,289 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1;"/>
+			<path d="M 54,279 L 44,267 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1;"/>
+			<path d="M 54,279 L 64,267 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="9.69580078125" y="251" style="font-family: TNR; font-size: 10px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,502) scale(1,-1)">Quản trị và Sở GDĐT</text>
+			<ellipse cx="320.0" cy="284.0" rx="153.0" ry="29.0" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="250.26708984375" y="291" style="font-family: TNR; font-size: 11px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,582) scale(1,-1)">Quản lý dữ liệu và điều phối kỳ</text>
+			<text x="227.27880859375" y="277" style="font-family: TNR; font-size: 11px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,554) scale(1,-1)">Duyệt điểm, xét tuyển mô phỏng, công bố</text>
+			<path d="M 105,285 L 165,285 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="165 285, 160.6121 287.3971, 160.6121 282.6029" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+			<circle cx="54" cy="221" r="5" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<path d="M 54,216 L 54,199 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1;"/>
+			<path d="M 42,209 L 66,209 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1;"/>
+			<path d="M 54,199 L 44,187 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1;"/>
+			<path d="M 54,199 L 64,187 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="20.3916015625" y="171" style="font-family: TNR; font-size: 10px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,342) scale(1,-1)">Giáo viên THCS</text>
+			<ellipse cx="320.0" cy="204.0" rx="153.0" ry="29.0" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="238.65478515625" y="211" style="font-family: TNR; font-size: 11px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,422) scale(1,-1)">Học sinh và nguyện vọng của trường</text>
+			<text x="239.962646484375" y="197" style="font-family: TNR; font-size: 11px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,394) scale(1,-1)">Đề nghị điều chỉnh, theo dõi kết quả</text>
+			<path d="M 105,205 L 165,205 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="165 205, 160.6121 207.3971, 160.6121 202.6029" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+			<circle cx="54" cy="141" r="5" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<path d="M 54,136 L 54,119 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1;"/>
+			<path d="M 42,129 L 66,129 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1;"/>
+			<path d="M 54,119 L 44,107 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1;"/>
+			<path d="M 54,119 L 64,107 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="20.67236328125" y="91" style="font-family: TNR; font-size: 10px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,182) scale(1,-1)">Giáo viên THPT</text>
+			<ellipse cx="320.0" cy="124.0" rx="153.0" ry="29.0" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="244.920166015625" y="131" style="font-family: TNR; font-size: 11px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,262) scale(1,-1)">Danh sách trúng tuyển vào trường</text>
+			<text x="236.61376953125" y="117" style="font-family: TNR; font-size: 11px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,234) scale(1,-1)">Theo dõi xác nhận và báo cáo theo kỳ</text>
+			<path d="M 105,125 L 165,125 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="165 125, 160.6121 127.3971, 160.6121 122.6029" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+			<circle cx="54" cy="61" r="5" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<path d="M 54,56 L 54,39 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1;"/>
+			<path d="M 42,49 L 66,49 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1;"/>
+			<path d="M 54,39 L 44,27 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1;"/>
+			<path d="M 54,39 L 64,27 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="36.0849609375" y="11" style="font-family: TNR; font-size: 10px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,22) scale(1,-1)">Học sinh</text>
+			<ellipse cx="320.0" cy="44.0" rx="153.0" ry="29.0" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="248.599365234375" y="51" style="font-family: TNR; font-size: 11px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,102) scale(1,-1)">Nguyện vọng và tra cứu cá nhân</text>
+			<text x="247.911865234375" y="37" style="font-family: TNR; font-size: 11px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,74) scale(1,-1)">Phúc khảo và xác nhận nhập học</text>
+			<path d="M 105,45 L 165,45 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="165 45, 160.6121 47.39713, 160.6121 42.60287" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+		</g>
+	</g>
+</svg>

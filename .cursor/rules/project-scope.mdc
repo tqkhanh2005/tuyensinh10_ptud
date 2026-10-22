@@ -1,0 +1,12 @@
+---
+description: Phạm vi địa phương của dự án tuyển sinh lớp 10
+alwaysApply: true
+---
+
+# Tuyển sinh lớp 10 TP.HCM
+
+- Toàn bộ dự án phục vụ Thành phố Hồ Chí Minh (TP.HCM).
+- Giao diện Cần Thơ chỉ là tài liệu tham khảo về thiết kế. Không dùng địa phương này cho nội dung mới.
+- Trường học, địa chỉ và dữ liệu giả lập mới phải phù hợp TP.HCM.
+- Không đổi nhãn lịch thi, chỉ tiêu hay kết quả Cần Thơ thành TP.HCM. Dùng dữ liệu TP.HCM có nguồn hoặc thông tin được quản trị công bố.
+- Ví dụ: tên trang là “Tuyển sinh lớp 10 TP.HCM”; khi chưa công bố chỉ tiêu, hiển thị trạng thái chưa có dữ liệu.

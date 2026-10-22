@@ -1,0 +1,22 @@
+[
+  {
+    "slug": "thcs_nguyen_du",
+    "school_code": "THCS_NGUYEN_DU",
+    "name": "Trường THCS Nguyễn Du",
+    "ward": "Bến Thành",
+    "address": "139 Nguyễn Du, phường Bến Thành, TP.HCM",
+    "phone": "02838298731",
+    "email": "lienhe@thcsnguyenduq1.edu.vn",
+    "source": "https://thcsnguyenduq1.hcm.edu.vn/"
+  },
+  {
+    "slug": "thcs_le_quy_don",
+    "school_code": "THCS_LE_QUY_DON",
+    "name": "Trường THCS Lê Quý Đôn",
+    "ward": "Xuân Hòa",
+    "address": "Số 2 Lê Quý Đôn, phường Xuân Hòa, TP.HCM",
+    "phone": null,
+    "email": "thcslequydonq3@gmail.com",
+    "source": "https://thcslequydonq3.hcm.edu.vn/"
+  }
+]

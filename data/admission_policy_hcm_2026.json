@@ -1,0 +1,21 @@
+{
+  "id":"hcm_regular_2026_v1", "academic_year":"2026-2027", "locality":"TP.HCM",
+  "scope":"Lớp 10 thường THPT công lập, thi tuyển; không gồm chuyên, tích hợp, tuyển thẳng và xét tuyển đặc thù",
+  "max_aspirations":3, "min_aspirations":1,
+  "subjects":{"Ngữ văn":{"weight":1,"max_score":10},"Toán":{"weight":1,"max_score":10},"Ngoại ngữ":{"weight":1,"max_score":10}},
+  "score_increment":0.25, "required_all_subjects":true, "minimum_subject_score_exclusive":0,
+  "priority_groups":{"none":0,"group_1":2,"group_2":1.5,"group_3":1},
+  "encouragement_awards":{"none":0,"gold_first":1.5,"silver_second":1,"bronze_third":0.5},
+  "bonus_cap":3.5, "multiple_benefits":"Chọn mức cao nhất trong từng loại ưu tiên và khuyến khích; hồ sơ phải được đối chiếu minh chứng",
+  "formula":"Ngữ văn + Toán + Ngoại ngữ + điểm ưu tiên + điểm khuyến khích",
+  "priority_order":"NV1 cao nhất; điểm chuẩn NV1 ≤ NV2 ≤ NV3 của cùng trường",
+  "tie_policy":"manual_review_at_quota_boundary",
+  "tie_note":"Các nguồn đã đối chiếu chưa nêu quy tắc phân xử đồng điểm tại ranh giới chỉ tiêu. Dừng xét tuyển để cơ quan có thẩm quyền xác nhận; không dùng mã học sinh để quyết định.",
+  "eligibility_review":"Hoàn thành THCS tại TP.HCM năm học 2025-2026; tuổi theo quy định và ngoại lệ phải được kiểm tra hồ sơ, không tự loại chỉ theo năm sinh",
+  "source_urls":["https://storage-edu.vnpt.vn/edu-vtu/503/2025/2026/TUYENSINH2026/2027/1700-Ke_hoach_tuyen_sinh_ban_hanh.pdf","https://gdnn-gdtxcuchi.hcm.edu.vn/cong-van-van-ban/huong-dan-tuyen-sinh-lop-10-cong-lap-nam-hoc-2026-2027/ctfull/42818/563252"],
+  "guidance_pdf":"https://filethpt.hcm.shieldix.app/data/doc/2026/gdnn-gdtxcuchi/2026_4/28/151-cv-so-3663-ts10-thuong2026_284202618.pdf",
+  "verified_on":"2026-10-20",
+  "historical_registration_dates":["2026-04-22","2026-04-28"],
+  "historical_adjustment_dates":["2026-05-04","2026-05-08"],
+  "historical_dates_note":"Mốc lịch sử của 2026-2027, không tự dời sang năm khác hoặc giờ hiện tại. Thời hạn phúc khảo, nhập học và chỉ tiêu cần nguồn riêng."
+}

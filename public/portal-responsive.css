@@ -1,0 +1,137 @@
+/* Shared layout rules for the public, candidate, teacher and administration views. */
+html { max-width: 100%; }
+body { min-width: 0; }
+.public-nav-brand, .public-nav-brand > div { min-width: 0; }
+.min-w-0, main .d-flex > .flex-grow-1, main .tw-flex > div { min-width: 0; overflow-wrap: anywhere; }
+.public-nav-actions { flex-shrink: 0; }
+.public-nav-actions > a { white-space: nowrap; }
+#mobileNavMenu { max-height: calc(100dvh - 80px); overflow-y: auto; }
+img, video, iframe { max-width: 100%; }
+.admin-main-wrapper, .teacher-main-wrapper, .admin-content,
+.portal-content-body, .card, .card-body, .row > *, .school-item, .quota-item {
+  min-width: 0;
+}
+.admin-main-wrapper, .teacher-main-wrapper { flex: 1 1 auto; }
+.portal-content-body { width: 100%; }
+.portal-content-body :is(h1,h2,h3,h4,h5,p,li), .school-item, .quota-item {
+  overflow-wrap: anywhere;
+}
+.portal-topbar {
+  height: auto;
+  min-height: 64px;
+  gap: 1rem;
+  padding-top: .65rem;
+  padding-bottom: .65rem;
+}
+.portal-topbar > .d-flex:first-child { min-width: 0; flex: 1 1 auto; }
+.portal-topbar > .d-flex:first-child > div { min-width: 0; }
+.portal-topbar > .d-flex:last-child { flex: 0 0 auto; gap: .5rem !important; }
+.portal-topbar h1 { overflow-wrap: anywhere; line-height: 1.4; }
+.portal-topbar .breadcrumb { flex-wrap: wrap; overflow-wrap: anywhere; }
+.portal-topbar .dropdown-toggle .d-md-inline {
+  max-width: 10rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.portal-topbar > .d-flex > .badge { max-width: 18vw; white-space: normal; line-height: 1.5; }
+.portal-topbar .dropdown-menu { max-width: min(22rem, calc(100vw - 2rem)); overflow-wrap: anywhere; }
+.portal-topbar .dropdown-menu .dropdown-item { white-space: normal; }
+.sidebar-header { gap: .5rem; }
+.sidebar-header > a { flex: 1 1 auto; min-width: 0; gap: .5rem !important; }
+.sidebar-header > a > div { min-width: 0; }
+.sidebar-logo, .sidebar-avatar { flex-shrink: 0; }
+.sidebar-brand-title, .sidebar-brand-sub { white-space: normal; overflow-wrap: anywhere; }
+.sidebar-header > button { flex-shrink: 0; }
+.admin-sidebar, .teacher-sidebar { max-height: 100dvh; }
+.sidebar-menu { min-height: 0; overscroll-behavior: contain; }
+.table-responsive {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+.table-responsive:focus-visible { outline: 2px solid #1769aa; outline-offset: 2px; }
+.table-responsive .table { width: 100%; margin-bottom: 0; font-size: .875rem; }
+.table-responsive :is(th,td) { vertical-align: middle; overflow-wrap: anywhere; }
+.table-responsive th { white-space: normal !important; line-height: 1.4; }
+.portal-content-body .table-responsive td { white-space: normal !important; max-width: 24rem; }
+.table-responsive td .badge { max-width: 100%; white-space: normal; line-height: 1.4; }
+.table-responsive td.font-monospace { white-space: normal !important; overflow-wrap: anywhere; }
+.table-responsive td :is(pre,code) { white-space: pre-wrap; overflow-wrap: anywhere; }
+.portal-data-table { table-layout: fixed; min-width: 720px; }
+.portal-table-wide { min-width: 900px; }
+.portal-table-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: .375rem; }
+.portal-table-actions :is(.btn,form) { margin: 0 !important; }
+.table-responsive tbody .btn { margin-top: 0; }
+.d-flex.gap-2 > .btn + .btn, .d-flex.gap-3 > .btn + .btn,
+.d-inline-flex.gap-1 > .btn + .btn { margin-left: 0; }
+.card-header.d-flex { flex-wrap: wrap; gap: .75rem; }
+select.form-select, input.form-control, textarea.form-control { max-width: 100%; min-width: 0; }
+.portal-content-body form .row > .d-flex, .portal-content-body form.row > .d-flex { flex-wrap: wrap; }
+.workflow-content { background: white; border: 1px solid #e2e8f0; border-radius: 1rem; padding: 1.5rem; }
+.workflow-content > h1 { font-size: 1.6rem; margin-bottom: 1.25rem; }
+.workflow-content form { display: flex; flex-wrap: wrap; align-items: flex-end; gap: .75rem; margin-bottom: 1rem; }
+.workflow-content form > label { display: flex; flex-direction: column; gap: .25rem; max-width: 100%; }
+.workflow-content :is(input:not([type=hidden]):not([type=checkbox]):not([type=radio]),select,textarea) {
+  padding: .5rem .75rem; border: 1px solid #cbd5e1; border-radius: .5rem;
+  min-width: 0; max-width: 100%; font: inherit;
+}
+.workflow-content textarea { width: 100%; min-height: 6rem; }
+.workflow-content button:not(.btn) {
+  padding: .5rem .85rem; border-radius: .5rem; background: #1769aa;
+  color: white; font: inherit; cursor: pointer;
+}
+.workflow-content button:disabled { opacity: .5; cursor: not-allowed; }
+.workflow-content td form { margin-bottom: .5rem; }
+.workflow-content pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: .85rem; }
+body :is(a,button,input,select,textarea):focus-visible {
+  outline: 2px solid #1769aa !important; outline-offset: 3px !important;
+}
+@media (max-width: 767.98px) {
+  .portal-content-body { padding: 1.25rem 1rem; }
+  .portal-topbar { padding-left: 1rem; padding-right: 1rem; gap: .5rem; }
+  .portal-topbar > .d-flex:first-child { gap: .5rem !important; }
+  .portal-topbar h1 { font-size: 1rem; }
+  .portal-topbar .dropdown-toggle { padding-left: .5rem !important; padding-right: .5rem !important; }
+  .workflow-content { padding: 1rem; }
+  .workflow-content form > :is(label,select,textarea) { width: 100%; }
+  .portal-content-body .card-header { padding-left: 1rem !important; padding-right: 1rem !important; }
+}
+@media (max-width: 1199.98px) {
+  .public-nav-links { display: none !important; }
+  .public-navbar #mobileNavToggle { display: inline-flex !important; }
+  .public-navbar #mobileNavMenu:not(.tw-hidden) { display: block !important; }
+  .public-nav-actions > a:not(:first-of-type) { display: none !important; }
+}
+@media (max-width: 575.98px) {
+  .portal-topbar .dropdown-toggle .badge { display: none !important; }
+  .admin-main-wrapper .portal-topbar .dropdown-toggle::before { content: 'Tài khoản'; font-size: .75rem; }
+  .admin-sidebar, .teacher-sidebar { width: min(260px, calc(100vw - 1rem)); min-width: 0; }
+  nav.tw-fixed > div > a { min-width: 0; flex: 1 1 auto; }
+  nav.tw-fixed > div > a > img { flex-shrink: 0; }
+  nav.tw-fixed > div > a > div { min-width: 0; }
+  nav.tw-fixed > div > a span { overflow-wrap: anywhere; }
+  .public-nav-brand > div > span:last-child { font-size: clamp(.75rem, 3.5vw, 1rem); }
+  .public-nav-brand > div > span:first-child { font-size: .45rem; letter-spacing: .04em; }
+  .public-navbar > div:first-child { gap: .5rem; }
+  .public-nav-actions { gap: .375rem; }
+  .public-nav-actions .btn { font-size: .75rem; padding-left: .6rem !important; padding-right: .6rem !important; }
+  #schools { padding-left: 1rem; padding-right: 1rem; }
+  #schools h2, #targets h2 { font-size: 1.75rem; }
+  #schoolTabs { gap: 1.5rem; }
+  .auth-login-page main > .tw-max-w-7xl { padding-left: 1rem; padding-right: 1rem; }
+  .auth-login-page .glass-card { padding: 1.5rem !important; border-radius: 1.5rem !important; }
+  .auth-login-page [id^="captcha-section-"] > .tw-flex { flex-wrap: wrap; }
+  .auth-login-page input[name="captchaText"] { flex: 1 1 100%; order: 2; min-height: 44px; }
+  .auth-login-page [id^="captcha-image-"] { flex: 1 1 auto; }
+  .auth-login-page [id^="captcha-section-"] > .tw-flex > div:last-child { margin-left: auto; }
+}
+@media print {
+  .portal-topbar, .admin-sidebar, .teacher-sidebar, .sidebar-backdrop { display: none !important; }
+  .admin-main-wrapper, .teacher-main-wrapper { margin: 0; width: 100%; }
+  .table-responsive { overflow: visible; }
+  .portal-data-table, .portal-table-wide { min-width: 0 !important; table-layout: auto; }
+  .table-responsive col { width: auto !important; }
+}

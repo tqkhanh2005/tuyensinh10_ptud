@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="480" height="285" preserveAspectRatio="xMinYMin meet" viewBox="0 0 480 285" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="480" height="285"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-285)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="15" y="220" width="450" height="54" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="211.729248046875" y="258" style="font-family: TNR-Bold; font-size: 11px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,516) scale(1,-1)">Trình duyệt</text>
+			<text x="154.6461181640625" y="239.0" style="font-family: TNR; font-size: 9.5px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,478) scale(1,-1)">Cổng công khai, học sinh, giáo viên, quản trị</text>
+			<rect x="15" y="145" width="450" height="54" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="161.171142578125" y="183" style="font-family: TNR-Bold; font-size: 11px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,366) scale(1,-1)">Trang PHP và kiểm soát truy cập</text>
+			<text x="146.3289794921875" y="164.0" style="font-family: TNR; font-size: 9.5px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,328) scale(1,-1)">Route, phiên đăng nhập, vai trò, CSRF, giao diện</text>
+			<rect x="15" y="70" width="450" height="54" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="150.453125" y="108" style="font-family: TNR-Bold; font-size: 11px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,216) scale(1,-1)">Hàm dịch vụ nghiệp vụ trong includes</text>
+			<text x="132.48486328125" y="89.0" style="font-family: TNR; font-size: 9.5px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,178) scale(1,-1)">Kỳ tuyển sinh, thi, điểm, phúc khảo, xét tuyển, nhập học</text>
+			<rect x="15" y="0" width="450" height="54" style="stroke: rgb(85%,85%,85%); stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="161.775390625" y="38" style="font-family: TNR-Bold; font-size: 11px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,76) scale(1,-1)">MySQL hoặc MariaDB qua PDO</text>
+			<text x="140.9342041015625" y="19.0" style="font-family: TNR; font-size: 9.5px;fill: rgb(6%,6%,6%); stroke:none;" transform="translate(0,38) scale(1,-1)">47 bảng, khóa ngoại, giao dịch, bản chụp và nhật ký</text>
+			<path d="M 240,220 L 240,200 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="240 200, 242.3971 204.3879, 237.6029 204.3879" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+			<path d="M 240,145 L 240,125 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="240 125, 242.3971 129.3879, 237.6029 129.3879" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+			<path d="M 240,70 L 240,50 Z" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 0.8;"/>
+			<polygon points="240 50, 242.3971 54.38791, 237.6029 54.38791" style="stroke: rgb(6%,6%,6%); stroke-linecap: butt; stroke-width: 1; fill: rgb(6%,6%,6%); fill-rule: evenodd;"/>
+		</g>
+	</g>
+</svg>

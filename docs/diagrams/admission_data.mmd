@@ -1,0 +1,9 @@
+erDiagram
+  admission_periods ||--o{ admission_runs : contains
+  admission_periods ||--o{ aspirations : scopes
+  candidates ||--o{ aspirations : registers
+  schools ||--o{ aspirations : receives
+  aspirations o|--o{ admission_results : evaluated_as
+  admission_runs ||--o{ admission_results : produces
+  admission_runs ||--o| admission_run_snapshots : preserves
+  admission_results ||--o| enrollment_confirmations : confirms

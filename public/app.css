@@ -1,0 +1,181 @@
+﻿:root {
+  --app-gap-sm: 0.5rem;
+  --app-gap-md: 0.75rem;
+  --app-gap-lg: 1rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: var(--app-gap-sm);
+}
+
+p, ul, ol {
+  margin-bottom: var(--app-gap-lg);
+}
+
+/* Native controls reset. Keep Bootstrap switches on their custom appearance. */
+input[type="radio"],
+input[type="checkbox"]:not([role]),
+input[type="checkbox"][role=""] {
+  appearance: auto !important;
+  -webkit-appearance: auto !important;
+}
+
+.modal.fade .modal-dialog {
+  transform: none !important;
+}
+
+label {
+  display: inline-block;
+  margin-bottom: 0.25rem;
+}
+
+form .form-control,
+form .form-select,
+form textarea,
+form .form-check {
+  margin-bottom: var(--app-gap-md);
+}
+
+form .btn {
+  margin-top: var(--app-gap-sm);
+}
+
+.btn + .btn {
+  margin-left: var(--app-gap-sm);
+}
+
+/* Admin Sidebar Styles */
+.admin-layout {
+  display: flex;
+  min-height: calc(100vh - 80px);
+  width: 100%;
+  overflow-x: hidden;
+  align-items: stretch;
+}
+
+.admin-sidebar {
+  width: 280px;
+  min-width: 280px; /* Force width to prevent jitter */
+  background: #fff;
+  border-right: 1px solid #e3e6f0;
+  z-index: 20;
+  flex-shrink: 0;
+}
+
+/* Only transition color/bg, avoid width/layout jitter */
+.admin-sidebar .nav-link {
+  color: #4e73df;
+  padding: 12px 20px;
+  font-weight: 600;
+  border-left: 3px solid transparent;
+  text-decoration: none;
+  display: block;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.admin-sidebar .nav-link:hover {
+  background-color: #f8f9fc;
+  color: #224abe;
+}
+
+.admin-sidebar .nav-link.active {
+  background-color: #f8f9fc;
+  color: #2e59d9;
+  border-left-color: #4e73df;
+}
+
+.admin-sidebar .nav-link i {
+  margin-right: 10px;
+  width: 20px;
+  text-align: center;
+}
+
+.admin-content {
+  flex-grow: 1;
+  padding: 24px;
+  background-color: #f8f9fc;
+}
+
+.sidebar-heading {
+  padding: 15px 20px 5px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #b7b9cc;
+}
+
+.admin-sidebar .dropdown-item.active {
+  color: #4e73df;
+  background-color: transparent;
+}
+
+.admin-layout.sidebar-collapsed .admin-sidebar,
+body.sidebar-collapsed-pref .admin-layout .admin-sidebar {
+  width: 84px;
+  min-width: 84px;
+}
+
+.admin-sidebar .sidebar-section-title {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-sidebar .sidebar-label {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-layout.sidebar-collapsed .admin-sidebar .sidebar-section-title,
+body.sidebar-collapsed-pref .admin-layout .admin-sidebar .sidebar-section-title,
+.admin-layout.sidebar-collapsed .admin-sidebar .sidebar-label,
+body.sidebar-collapsed-pref .admin-layout .admin-sidebar .sidebar-label,
+.admin-layout.sidebar-collapsed .admin-sidebar .sidebar-footer,
+body.sidebar-collapsed-pref .admin-layout .admin-sidebar .sidebar-footer {
+  display: none !important;
+}
+
+.admin-layout.sidebar-collapsed .admin-sidebar .sidebar-link,
+body.sidebar-collapsed-pref .admin-layout .admin-sidebar .sidebar-link,
+.admin-layout.sidebar-collapsed .admin-sidebar .sidebar-sub-link,
+body.sidebar-collapsed-pref .admin-layout .admin-sidebar .sidebar-sub-link {
+  justify-content: center;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.admin-layout.sidebar-collapsed .admin-sidebar .sidebar-submenu,
+body.sidebar-collapsed-pref .admin-layout .admin-sidebar .sidebar-submenu {
+  padding-left: 0 !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.admin-layout.sidebar-collapsed .admin-sidebar .sidebar-sub-link,
+body.sidebar-collapsed-pref .admin-layout .admin-sidebar .sidebar-sub-link {
+  width: 44px;
+  height: 36px;
+  border-radius: 10px;
+}
+
+.admin-layout.sidebar-collapsed .admin-sidebar .material-symbols-outlined,
+body.sidebar-collapsed-pref .admin-layout .admin-sidebar .material-symbols-outlined {
+  margin: 0;
+}
+
+/* Prevent browser forced dark-mode or CSS filters from inverting the site logo */
+img[src$="graduate.png"] {
+  forced-color-adjust: none !important;
+  color-scheme: only light !important;
+  filter: none !important;
+  -webkit-filter: none !important;
+  mix-blend-mode: normal !important;
+  isolation: isolate !important;
+  opacity: 1 !important;
+}
+
