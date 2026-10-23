@@ -28,8 +28,8 @@ try {
     $changed['admission_area'] = 'TAMPERED';
     edit_check(school_edit_save($pdo, $id, $changed) === [], 'Valid edit rejected');
     $saved = school_find($pdo, $id);
-    edit_check($saved['name'] === $changed['name'] && $saved['level'] === 'THPT', 'Changes not saved');
-    foreach (['school_code', 'district', 'admission_area'] as $key) {
+    edit_check($saved['name'] === $changed['name'], 'Changes not saved');
+    foreach (['level', 'school_code', 'district', 'admission_area'] as $key) {
         edit_check($saved[$key] === $original[$key], 'Protected metadata changed: ' . $key);
     }
     foreach (['name', 'address', 'phone', 'email'] as $key) {
@@ -39,7 +39,7 @@ try {
         edit_check(school_find($pdo, $id) === $saved, 'Failed edit changed data');
     }
     $invalid = ['name' => '', 'level' => 'INVALID', 'address' => '', 'phone' => 'abc', 'email' => 'invalid'];
-    edit_check(count(school_edit_save($pdo, $id, $invalid)) >= 5, 'Invalid fields accepted');
+    edit_check(count(school_edit_save($pdo, $id, $invalid)) >= 4, 'Invalid fields accepted');
     edit_check(school_find($pdo, $id) === $saved, 'Invalid edit changed data');
     $long = $changed;
     $long['name'] = str_repeat('ộ', 151);

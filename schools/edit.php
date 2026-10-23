@@ -33,6 +33,7 @@ $data = $school;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require_csrf();
     $data = school_batch_rows([$_POST])[0];
+    $data['level'] = $school['level'];
     try {
         $errors = school_edit_save($pdo, (int)$id, $data);
         if (!$errors) {
@@ -63,7 +64,7 @@ admin_layout_start('Sửa trường học', 'schools', ['Quản lý trường h�
         <div class="mb-4 position-relative pe-4">
           <a class="btn-close position-absolute top-0 end-0" href="<?= e(url('/schools/index.php')) ?>" aria-label="Đóng form, không lưu thay đổi"></a>
           <h1 class="h3 fw-bold text-dark mb-1">Cập nhật thông tin trường</h1>
-          <p class="text-muted mb-0">Chỉnh sửa thông tin trường THCS, THPT tại TP.HCM. Cả 5 thông tin đều bắt buộc.</p>
+          <p class="text-muted mb-0">Chỉnh sửa tên và thông tin liên hệ của trường tại TP.HCM. Cấp học được giữ nguyên.</p>
           <p class="text-muted mt-2 mb-0">Mã trường: <strong><?= e($school['school_code']) ?></strong></p>
         </div>
 
@@ -86,12 +87,9 @@ admin_layout_start('Sửa trường học', 'schools', ['Quản lý trường h�
               <input class="form-control" id="name" name="name" maxlength="150" value="<?= e($data['name'] ?? '') ?>" required>
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold text-secondary small" for="level">Cấp học <span class="text-danger">*</span></label>
-              <select class="form-select" id="level" name="level" required>
-                <option value="">Chọn cấp học</option>
-                <option value="THCS" <?= ($data['level'] ?? '') === 'THCS' ? 'selected' : '' ?>>THCS</option>
-                <option value="THPT" <?= ($data['level'] ?? '') === 'THPT' ? 'selected' : '' ?>>THPT</option>
-              </select>
+              <label class="form-label fw-semibold text-secondary small" for="level">Cấp học</label>
+              <input class="form-control" id="level" name="level" value="<?= e($school['level']) ?>" readonly aria-describedby="level-help">
+              <div class="form-text" id="level-help">Không thể thay đổi cấp học khi cập nhật trường.</div>
             </div>
             <div class="col-md-6">
               <label class="form-label fw-semibold text-secondary small" for="phone">Số điện thoại <span class="text-danger">*</span></label>
