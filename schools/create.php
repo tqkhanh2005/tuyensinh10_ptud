@@ -6,7 +6,7 @@ require_once __DIR__ . '/../includes/school_batch_service.php';
 require_permission('school.manage');
 
 if (isset($_GET['template'])) {
-    excel_csv_download('mau_them_truong.csv', array_values(school_batch_fields()), []);
+    excel_xlsx_download('mau_them_truong.xlsx', array_values(school_batch_fields()), []);
 }
 $rows = school_batch_rows([]);
 $errors = [];
@@ -59,6 +59,8 @@ if ($posted) {
 require_once __DIR__ . '/../includes/admin_layout.php';
 admin_layout_start('Thêm trường THCS, THPT', 'schools', ['Quản lý trường học' => url('/schools/index.php'), 'Thêm trường' => '']);
 ?>
+<link rel="stylesheet" href="<?= e(url('/schools/schools.css')) ?>">
+<section class="schools-page schools-create" aria-label="Quản lý trường học">
 <div class="bg-white rounded-4 shadow-sm p-4">
   <h1 class="h3">Thêm trường THCS, THPT</h1>
   <p class="text-muted">Nhập các trường tại TP.HCM. Tất cả 5 thông tin đều bắt buộc. Mã trường được tạo tự động khi lưu. Tối đa 100 dòng mỗi lần.</p>
@@ -71,23 +73,43 @@ admin_layout_start('Thêm trường THCS, THPT', 'schools', ['Quản lý trườ
   <?php endif; ?>
   <form method="post" enctype="multipart/form-data" id="school-form" novalidate>
     <?= csrf_field() ?>
-    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+    <div class="schools-import-toolbar">
       <button type="button" id="add-row" class="btn btn-outline-primary">Thêm dòng</button>
-      <label for="excel" class="form-label mb-0">File Excel</label>
-      <input type="file" id="excel" name="excel" accept=".xlsx,.csv" class="form-control w-auto">
-      <button type="submit" name="action" value="import" class="btn btn-outline-primary">Nhập từ Excel</button>
-      <a href="?template=1" id="download-template">Tải mẫu CSV</a>
+      <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#school-import-modal">Nhập từ Excel</button>
     </div>
-    <p class="small text-muted">Hỗ trợ .xlsx và CSV UTF-8 (tối đa 2 MB). Cột: Tên trường, Cấp học, Địa chỉ, SĐT, Email. Định dạng cột SĐT là văn bản để giữ số 0 đầu. Dữ liệu nhập từ file được nối vào bảng để rà soát trước khi lưu.</p>
+    <div class="modal fade" id="school-import-modal" tabindex="-1" aria-labelledby="school-import-title" aria-describedby="school-import-description" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title fs-5" id="school-import-title">Nhập trường học từ Excel</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+          </div>
+          <div class="modal-body">
+            <p id="school-import-description" class="text-muted">Tải file mẫu, điền thông tin trường tại TP.HCM rồi chọn file để nhập vào bảng rà soát.</p>
+            <a href="?template=1" id="download-template" class="btn btn-outline-primary mb-4">Tải mẫu Excel (.xlsx)</a>
+            <div>
+              <label for="excel" class="form-label">Chọn file Excel</label>
+              <input type="file" id="excel" name="excel" accept=".xlsx" class="form-control" aria-describedby="school-excel-help">
+              <div id="school-excel-help" class="form-text">Chỉ hỗ trợ .xlsx, tối đa 2 MB và 100 dòng. Các cột: Tên trường, Cấp học, Địa chỉ, Số điện thoại, Email. Định dạng cột Số điện thoại là văn bản để giữ số 0 đầu.</div>
+            </div>
+            <p class="small text-muted mt-3 mb-0">Dữ liệu được nối vào bảng để kiểm tra. Chọn “Lưu tất cả” sau khi rà soát để lưu trường vào hệ thống.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
+            <button type="submit" name="action" value="import" class="btn btn-primary">Nhập vào bảng</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="table-responsive">
-      <table class="table table-bordered align-middle">
+      <table class="table table-bordered align-middle schools-batch-table">
         <thead><tr><th scope="col">Dòng</th><?php foreach (school_batch_fields() as $label): ?><th scope="col"><?= e($label) ?> *</th><?php endforeach; ?><th scope="col">Thao tác</th></tr></thead>
         <tbody id="school-rows">
         <?php foreach ($rows as $i => $row): ?>
           <tr id="school-row-<?= $i ?>" class="<?= isset($errors[$i]) ? 'table-danger' : '' ?>">
             <td class="row-number"><?= $i + 1 ?></td>
             <?php foreach (school_batch_fields() as $key => $label): ?>
-            <td style="min-width:<?= $key === 'level' ? '110' : '190' ?>px">
+            <td class="<?= $key === 'level' ? 'school-level-cell' : 'school-field-cell' ?>">
               <?php if ($key === 'level'): ?>
                 <select class="form-select" data-field="level" name="rows[<?= $i ?>][level]" aria-label="Cấp học dòng <?= $i + 1 ?>" required>
                   <option value="">Chọn cấp học</option>
@@ -105,7 +127,7 @@ admin_layout_start('Thêm trường THCS, THPT', 'schools', ['Quản lý trườ
         </tbody>
       </table>
     </div>
-    <div class="d-flex gap-2 mt-3">
+    <div class="schools-form-actions">
       <button type="submit" name="action" value="save" class="btn btn-primary">Lưu tất cả</button>
       <a class="btn btn-outline-secondary" href="<?= e(url('/schools/index.php')) ?>">Quay lại danh sách</a>
     </div>
@@ -161,4 +183,5 @@ admin_layout_start('Thêm trường THCS, THPT', 'schools', ['Quản lý trườ
   });
 })();
 </script>
+</section>
 <?php admin_layout_end();

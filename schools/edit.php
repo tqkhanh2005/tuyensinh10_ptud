@@ -55,8 +55,10 @@ $activePage = 'schools';
 
 admin_layout_start('Sửa trường học', 'schools', ['Quản lý trường học' => url('/schools/index.php'), 'Sửa trường' => '']);
 ?>
+<link rel="stylesheet" href="<?= e(url('/schools/schools.css')) ?>">
+<section class="schools-page schools-edit" aria-label="Quản lý trường học">
   <div class="row justify-content-center">
-    <div class="col-lg-8">
+    <div class="col-12 schools-edit-container">
       <div class="bg-white rounded-4 shadow-sm p-4 p-md-5">
         <div class="mb-4 position-relative pe-4">
           <a class="btn-close position-absolute top-0 end-0" href="<?= e(url('/schools/index.php')) ?>" aria-label="Đóng form, không lưu thay đổi"></a>
@@ -100,13 +102,13 @@ admin_layout_start('Sửa trường học', 'schools', ['Quản lý trường h�
               <label class="form-label fw-semibold text-secondary small" for="email">Email liên hệ <span class="text-danger">*</span></label>
               <input class="form-control" type="email" id="email" name="email" maxlength="150" value="<?= e($data['email'] ?? '') ?>" required>
             </div>
-            <div class="col-md-6">
+            <div class="col-12">
               <label class="form-label fw-semibold text-secondary small" for="address">Địa chỉ <span class="text-danger">*</span></label>
               <input class="form-control" id="address" name="address" maxlength="255" value="<?= e($data['address'] ?? '') ?>" required>
             </div>
           </div>
 
-          <div class="mt-4 pt-2 d-flex gap-2">
+          <div class="schools-form-actions">
             <button class="btn btn-primary px-4 fw-medium" type="submit">
               Xác nhận
             </button>
@@ -116,6 +118,7 @@ admin_layout_start('Sửa trường học', 'schools', ['Quản lý trường h�
       </div>
     </div>
   </div>
+</section>
 <?php
 admin_layout_end();
 

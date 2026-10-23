@@ -39,6 +39,8 @@ $activePage = 'schools';
 
 admin_layout_start('Quản lý trường học', 'schools', ['Quản lý trường học' => '']);
 ?>
+<link rel="stylesheet" href="<?= e(url('/schools/schools.css')) ?>">
+<section class="schools-page schools-index" aria-label="Quản lý trường học">
   <!-- Tiêu đề trang & Nút thêm trường -->
   <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
     <div>
@@ -55,7 +57,7 @@ admin_layout_start('Quản lý trường học', 'schools', ['Quản lý trườ
   <?php if ($success): ?>
     <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
       <?= e($success) ?>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng thông báo"></button>
     </div>
   <?php endif; ?>
 
@@ -69,7 +71,7 @@ admin_layout_start('Quản lý trường học', 'schools', ['Quản lý trườ
   <!-- Bộ lọc tìm kiếm -->
   <div class="card border-0 shadow-sm rounded-4 mb-4 bg-white">
     <div class="card-body p-3 p-md-4">
-      <form method="get" action="<?= e(url('/schools/index.php')) ?>" class="row g-3">
+      <form method="get" action="<?= e(url('/schools/index.php')) ?>" class="row g-3 schools-filters">
         <div class="col-md-5 col-lg-5">
           <label for="q" class="form-label small fw-semibold text-muted mb-2">Từ khóa tìm kiếm</label>
           <input type="text" class="form-control mb-0" id="q" name="q" placeholder="Mã trường, tên trường, quận/huyện..." value="<?= e($q) ?>">
@@ -97,7 +99,7 @@ admin_layout_start('Quản lý trường học', 'schools', ['Quản lý trườ
 
   <!-- Bảng danh sách trường -->
   <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white mb-4">
-    <div class="card-header bg-white border-bottom py-3 px-4 d-flex justify-content-between align-items-center">
+    <div class="card-header bg-white border-bottom py-3 px-4 d-flex flex-wrap gap-3 justify-content-between align-items-center">
       <h5 class="mb-0 fw-bold text-dark">
         Danh sách trường học
       </h5>
@@ -160,6 +162,7 @@ admin_layout_start('Quản lý trường học', 'schools', ['Quản lý trườ
       </table>
     </div>
   </div>
+</section>
 <?php
 admin_layout_end();
 

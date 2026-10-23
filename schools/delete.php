@@ -63,8 +63,10 @@ $activePage = 'schools';
 
 admin_layout_start('Xóa trường học', 'schools', ['Quản lý trường học' => url('/schools/index.php'), 'Xóa trường' => '']);
 ?>
+<link rel="stylesheet" href="<?= e(url('/schools/schools.css')) ?>">
+<section class="schools-page schools-delete" aria-label="Quản lý trường học">
   <div class="row justify-content-center">
-    <div class="col-lg-6">
+    <div class="col-12 schools-delete-container">
       <div class="bg-white rounded-4 shadow-sm p-4 p-md-5 position-relative" role="dialog" aria-labelledby="delete-title" aria-describedby="delete-description">
         <a class="btn-close position-absolute top-0 end-0 m-3" href="<?= e(url('/schools/index.php')) ?>" aria-label="Đóng hộp thoại, hủy xóa"></a>
         <h1 id="delete-title" class="h4 fw-bold mb-3 text-danger pe-3">
@@ -76,7 +78,7 @@ admin_layout_start('Xóa trường học', 'schools', ['Quản lý trường h�
         <p class="small text-muted">Cấp học: <?= e($existing['level']) ?>. Chỉ có thể xóa trường không có dữ liệu liên quan.</p>
         <form method="post" action="<?= e(url('/schools/delete.php?id=' . (int)$existing['id'])) ?>">
           <?= csrf_field() ?>
-          <div class="d-flex gap-2">
+          <div class="schools-form-actions">
             <button class="btn btn-danger fw-medium" type="submit" name="action" value="delete">
               Xác nhận xóa
             </button>
@@ -86,5 +88,6 @@ admin_layout_start('Xóa trường học', 'schools', ['Quản lý trường h�
       </div>
     </div>
   </div>
+</section>
 <?php
 admin_layout_end();

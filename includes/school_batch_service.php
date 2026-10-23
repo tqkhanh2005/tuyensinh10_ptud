@@ -31,8 +31,8 @@ function school_batch_import(array $file): array
     if (($file['size'] ?? 0) > 2 * 1024 * 1024) {
         throw new InvalidArgumentException('File không được vượt quá 2 MB.');
     }
-    if (!in_array(strtolower(pathinfo($file['name'], PATHINFO_EXTENSION)), ['xlsx', 'csv'], true)) {
-        throw new InvalidArgumentException('Sai định dạng file. Vui lòng dùng Excel .xlsx hoặc CSV UTF-8.');
+    if (strtolower(pathinfo($file['name'], PATHINFO_EXTENSION)) !== 'xlsx') {
+        throw new InvalidArgumentException('Sai định dạng file. Chỉ chấp nhận file Excel .xlsx.');
     }
     $table = excel_parse_upload($file['tmp_name'], $file['name']);
     $headers = array_shift($table) ?? [];
