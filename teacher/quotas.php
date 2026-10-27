@@ -6,6 +6,7 @@ require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/portal_helper.php';
 require_once __DIR__ . '/../includes/teacher_layout.php';
+require_once __DIR__ . '/../includes/quota_workflow_service.php';
 
 require_teacher_access();
 
@@ -23,38 +24,19 @@ $schoolId = (int)($teacherInfo['school_id'] ?? 0);
 $pdo = db();
 $q = trim((string)($_GET['q'] ?? ''));
 
-$where = ['s.level = "THPT"', 's.active = 1'];
-$params = [];
-
-if ($q !== '') {
-    $where[] = '(s.name LIKE :q OR s.school_code LIKE :q OR s.admission_area LIKE :q)';
-    $params['q'] = '%' . $q . '%';
-}
-
-$whereSql = 'WHERE ' . implode(' AND ', $where);
-
-$sql = "
-    SELECT s.id, s.school_code, s.name, s.admission_area, s.district,
-           COALESCE(SUM(aq.quota), 0) AS total_quota
-    FROM schools s
-    LEFT JOIN admission_quotas aq ON aq.school_id = s.id
-    $whereSql
-    GROUP BY s.id
-    ORDER BY s.name ASC
-";
-
+$periodId = (int)($_GET['period_id'] ?? 0);
 $quotas = [];
+$quotaError = '';
 $totalAllQuota = 0;
 try {
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute($params);
-    $quotas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $quotas = quota_public_rows($pdo, $periodId, $q);
 
     foreach ($quotas as $row) {
         $totalAllQuota += (int)$row['total_quota'];
     }
 } catch (Throwable $e) {
     error_log('Teacher Quotas Error: ' . $e->getMessage());
+    $quotaError = 'Không thể tải chỉ tiêu. Vui lòng thử lại sau.';
 }
 
 teacher_layout_start('Chỉ tiêu tuyển sinh THPT', 'quotas', ['Chỉ tiêu tuyển sinh' => '']);
@@ -66,20 +48,23 @@ teacher_layout_start('Chỉ tiêu tuyển sinh THPT', 'quotas', ['Chỉ tiêu tu
       <i class="fas fa-bullseye text-success me-2"></i>Chỉ Tiêu Tuyển Sinh Lớp 10 Các Trường THPT
     </h1>
     <p class="text-muted small mb-0">
-      Bảng phân bổ chỉ tiêu tuyển sinh chính thức do Sở Giáo dục và Đào tạo phê duyệt.
+      Chỉ hiển thị chỉ tiêu đã công bố của một kỳ tuyển sinh chính thức tại TP.HCM.
+      <?php if ($quotas): ?>Kỳ: <?= e($quotas[0]['period_name']) ?> · <?= e($quotas[0]['academic_year']) ?>.<?php endif; ?>
     </p>
   </div>
   <div class="d-flex align-items-center gap-2">
     <span class="badge bg-success bg-opacity-10 text-success fw-bold px-3 py-1.5 rounded-pill">
-      Tổng chỉ tiêu toàn thành phố: <?= number_format($totalAllQuota) ?> học sinh
+      Tổng chỉ tiêu trong danh sách: <?= number_format($totalAllQuota) ?> học sinh
     </span>
   </div>
 </div>
 
 <!-- Bộ lọc tìm kiếm trường -->
+<?php if ($quotaError !== ''): ?><div class="alert alert-danger" role="alert"><?= e($quotaError) ?></div><?php endif; ?>
 <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
   <div class="card-body p-3 p-md-4">
     <form method="GET" action="<?= e(url('/teacher/quotas.php')) ?>" class="row g-3 align-items-end">
+      <?php if ($periodId): ?><input type="hidden" name="period_id" value="<?= $periodId ?>"><?php endif; ?>
       <div class="col-md-9">
         <label class="form-label small fw-bold text-muted mb-1">Tìm kiếm trường THPT</label>
         <div class="input-group input-group-sm">
@@ -94,7 +79,7 @@ teacher_layout_start('Chỉ tiêu tuyển sinh THPT', 'quotas', ['Chỉ tiêu tu
         <button type="submit" class="btn btn-success btn-sm w-100 fw-semibold rounded-pill">
           <i class="fas fa-search me-1"></i>Tìm kiếm
         </button>
-        <a href="<?= e(url('/teacher/quotas.php')) ?>" class="btn btn-outline-secondary btn-sm rounded-pill" title="Làm mới">
+        <a href="<?= e(url('/teacher/quotas.php?period_id=' . $periodId)) ?>" class="btn btn-outline-secondary btn-sm rounded-pill" title="Làm mới">
           <i class="fas fa-redo"></i>
         </a>
       </div>
@@ -148,7 +133,7 @@ teacher_layout_start('Chỉ tiêu tuyển sinh THPT', 'quotas', ['Chỉ tiêu tu
         <?php if (empty($quotas)): ?>
           <tr>
             <td colspan="5" class="text-center py-5 text-muted">
-              Không tìm thấy trường THPT phù hợp với từ khóa.
+              Chưa có chỉ tiêu chính thức được công bố hoặc không có trường phù hợp với từ khóa.
             </td>
           </tr>
         <?php endif; ?>

@@ -62,36 +62,36 @@ function selection_plan(array $input,array $resolutions=[]): array {
     foreach($input['aspirations'] as $a)$asp[(int)$a['candidate_id']][]=$a;
     foreach($input['papers'] as $p)$papers[(int)$p['candidate_id']][(int)$p['exam_subject_id']]=$p;
     foreach($input['bonus_reviews'] as $r)$reviews[(int)$r['candidate_id']]=$r;
-    foreach($input['candidates'] as $c){$id=(int)$c['id'];$reasons=[];$sum=0;$bonus=0;$list=$asp[$id] ?? [];
+    foreach($input['candidates'] as $c){$id=(int)$c['id'];$reasons=[];$sum=0;$bonus=0;$subject_scores=[];$list=$asp[$id] ?? [];
         if($c['status']!=='active' || !(int)$c['user_active'] || !(int)$c['eligible'])$reasons[]='Hồ sơ hoặc tài khoản không đủ điều kiện.';
         $profileEligible=!$reasons;
-        if($profileEligible && empty($c['exam_number']))$errors[]='Có học sinh đăng ký chưa có SBD của kỳ.';
-        if(count($list)<1 || count($list)>3 || array_map('intval',array_column($list,'priority_order'))!==range(1,count($list)) || count(array_unique(array_column($list,'school_id')))!==count($list))$errors[]='Có thứ tự nguyện vọng không hợp lệ.';
+        if($profileEligible && empty($c['exam_number']))$reasons[]='Có học sinh đăng ký chưa có SBD của kỳ.';
+        if(count($list)!==3 || array_map('intval',array_column($list,'priority_order'))!==range(1,count($list)) || count(array_unique(array_column($list,'school_id')))!==count($list))$reasons[]='Có thứ tự nguyện vọng không hợp lệ.';
         foreach($list as $a)if(!array_key_exists((int)$a['school_id'],$quotas))$errors[]='Nguyện vọng gắn trường không hoạt động hoặc thiếu chỉ tiêu.';
         if($profileEligible)foreach($subjectNames as $subject=>$name){$p=$papers[$id][$subject] ?? null;
-            if(!$p){$errors[]='Có hồ sơ thiếu bài thi; cần hoàn tất điểm danh.';continue;}
+            if(!$p){$reasons[]='Có hồ sơ thiếu bài thi; cần hoàn tất điểm danh.';continue;}
             if($p['attendance_status']==='absent'){$reasons[]='Vắng môn '.$name.'.';continue;}
             $raw=$p['appeal_status']==='completed'?$p['appeal_score']:$p['original_score'];
-            if(!in_array($p['attendance_status'],['present','present_penalty'],true) || $raw===null || $p['paper_status']!=='matched'){$errors[]='Có bài thi chưa đủ điểm hoặc chưa ghép phách.';continue;}
-            $raw=(float)$raw;if(!is_finite($raw) || $raw<0 || $raw>10 || abs($raw*4-round($raw*4))>0.00001){$errors[]='Có điểm môn không hợp lệ.';continue;}
+            if(!in_array($p['attendance_status'],['present','present_penalty'],true) || $raw===null || $p['paper_status']!=='matched'){$reasons[]='Có bài thi chưa đủ điểm hoặc chưa ghép phách.';continue;}
+            if(!is_numeric($raw)){$reasons[]='Điểm môn không phải số.';continue;}$raw=(float)$raw;if(!is_finite($raw) || $raw<0 || $raw>10 || abs($raw*4-round($raw*4))>0.00001){$reasons[]='Có điểm môn không hợp lệ.';continue;}
             $penalty=(int)($p['penalty_percent'] ?? 0);
-            if($p['attendance_status']==='present_penalty' && !in_array($penalty,[25,50,100],true)){$errors[]='Có mức xử phạt không hợp lệ.';continue;}
-            if($p['attendance_status']==='present' && $penalty!==0){$errors[]='Mức xử phạt không khớp điểm danh.';continue;}
-            $effective=round($raw*(100-$penalty)/100,2);$sum+=$effective;if($effective<=0)$reasons[]='Môn '.$name.' có điểm 0 sau xử lý điểm.';
+            if($p['attendance_status']==='present_penalty' && !in_array($penalty,[25,50,100],true)){$reasons[]='Có mức xử phạt không hợp lệ.';continue;}
+            if($p['attendance_status']==='present' && $penalty!==0){$reasons[]='Mức xử phạt không khớp điểm danh.';continue;}
+            $effective=round($raw*(100-$penalty)/100,2);$sum+=$effective;$subject_scores[$name]=$effective;if($effective<=0)$reasons[]='Môn '.$name.' có điểm 0 sau xử lý điểm.';
         }
-        if(isset($reviews[$id])){$r=$reviews[$id];$policy=$input['policy'];if(!isset($policy['priority_groups'][$r['priority_group']],$policy['encouragement_awards'][$r['award_group']]) || trim($r['evidence'])==='')$errors[]='Hồ sơ điểm cộng chưa hợp lệ.';
+        if(isset($reviews[$id])){$r=$reviews[$id];$policy=$input['policy'];if(!isset($policy['priority_groups'][$r['priority_group']],$policy['encouragement_awards'][$r['award_group']]) || trim($r['evidence'])==='')$reasons[]='Hồ sơ điểm cộng chưa hợp lệ.';
             else $bonus=min((float)$policy['bonus_cap'],(float)$policy['priority_groups'][$r['priority_group']]+(float)$policy['encouragement_awards'][$r['award_group']]);
-        }elseif($profileEligible && (float)($c['legacy_bonus'] ?? 0)!==0.0)$errors[]='Có điểm cộng cũ chưa được đối chiếu minh chứng.';
-        $candidates[$id]=$c+['reasons'=>array_values(array_unique($reasons)),'score_total'=>round($sum,2),'priority_points'=>$bonus,'admission_score'=>round($sum+$bonus,2),'eligible_selection'=>!$reasons];
+        }elseif($profileEligible && (float)($c['legacy_bonus'] ?? 0)!==0.0)$reasons[]='Có điểm cộng cũ chưa được đối chiếu minh chứng.';
+        $candidates[$id]=$c+['reasons'=>array_values(array_unique($reasons)),'subject_scores'=>$subject_scores,'score_total'=>round($sum,2),'priority_points'=>$bonus,'admission_score'=>round($sum+$bonus,2),'eligible_selection'=>!$reasons];
     }
     $assigned=[];$ranks=[];$used=array_fill_keys(array_keys($quotas),0);$cutoffs=[];$hash=selection_input_hash($input);$tie=null;
     if(!$errors)for($priority=1;$priority<=3;$priority++){
-        $groups=[];foreach($input['aspirations'] as $a){$id=(int)$a['candidate_id'];$school=(int)$a['school_id'];if((int)$a['priority_order']===$priority && !isset($assigned[$id]) && !empty($candidates[$id]['eligible_selection']) && $candidates[$id]['admission_score']>=($cutoffs[$school]['floor'] ?? 0))$groups[$school][]=$a;}
+        $groups=[];foreach($input['aspirations'] as $a){$id=(int)$a['candidate_id'];$school=(int)$a['school_id'];if((int)$a['priority_order']===$priority && !isset($assigned[$id]) && !empty($candidates[$id]['eligible_selection']))$groups[$school][]=$a;}
         ksort($groups);foreach($groups as $school=>$items){$left=$quotas[$school]-$used[$school];if($left<=0)continue;
-            usort($items,static fn($a,$b)=>$candidates[(int)$b['candidate_id']]['admission_score']<=>$candidates[(int)$a['candidate_id']]['admission_score']);
+            usort($items,static fn($a,$b)=>$candidates[(int)$b['candidate_id']]['admission_score']<=>$candidates[(int)$a['candidate_id']]['admission_score'] ?: $candidates[(int)$b['candidate_id']]['score_total']<=>$candidates[(int)$a['candidate_id']]['score_total']);
             $selected=array_slice($items,0,$left);
             if(count($items)>$left){$boundary=$candidates[(int)$items[$left-1]['candidate_id']]['admission_score'];$next=$candidates[(int)$items[$left]['candidate_id']]['admission_score'];
-                if(abs($boundary-$next)<0.00001){$higher=[];$equal=[];foreach($items as $a){$score=$candidates[(int)$a['candidate_id']]['admission_score'];if($score>$boundary)$higher[]=$a;elseif(abs($score-$boundary)<0.00001)$equal[]=$a;}
+                if(abs($boundary-$next)<0.00001 && abs($candidates[(int)$items[$left-1]['candidate_id']]['score_total']-$candidates[(int)$items[$left]['candidate_id']]['score_total'])<0.00001){$base=$candidates[(int)$items[$left-1]['candidate_id']]['score_total'];$higher=[];$equal=[];foreach($items as $a){$score=$candidates[(int)$a['candidate_id']]['admission_score'];if($score>$boundary || (abs($score-$boundary)<0.00001 && $candidates[(int)$a['candidate_id']]['score_total']>$base))$higher[]=$a;elseif(abs($score-$boundary)<0.00001 && abs($candidates[(int)$a['candidate_id']]['score_total']-$base)<0.00001)$equal[]=$a;}
                     $ids=array_map('intval',array_column($equal,'candidate_id'));sort($ids);$seats=$left-count($higher);$key=hash('sha256',selection_json([$hash,$school,$priority,$boundary,$seats,$ids]));$chosen=array_map('intval',$resolutions[$key] ?? []);
                     if(count($chosen)!==$seats || count(array_unique($chosen))!==$seats || array_diff($chosen,$ids)){$tie=['key'=>$key,'school_id'=>$school,'school_name'=>$schools[$school]['name'],'priority'=>$priority,'score'=>$boundary,'seats'=>$seats,'candidates'=>array_map(static fn($id)=>$candidates[$id],$ids)];break 2;}
                     $selected=array_merge($higher,array_values(array_filter($equal,static fn($a)=>in_array((int)$a['candidate_id'],$chosen,true))));
@@ -99,17 +99,29 @@ function selection_plan(array $input,array $resolutions=[]): array {
             }
             foreach($items as $i=>$a)$ranks[(int)$a['id']]=$i+1;
             foreach($selected as $a){$assigned[(int)$a['candidate_id']]=(int)$a['id'];$used[$school]++;}
-            if($selected){$minimum=min(array_map(static fn($a)=>$candidates[(int)$a['candidate_id']]['admission_score'],$selected));$cutoffs[$school]['NV'.$priority]=$minimum;$cutoffs[$school]['floor']=max($cutoffs[$school]['floor'] ?? 0,$minimum);}
+            if($selected){$minimum=min(array_map(static fn($a)=>$candidates[(int)$a['candidate_id']]['admission_score'],$selected));$cutoffs[$school]['NV'.$priority]=$minimum;$cutoffs[$school]['minimum']=min($cutoffs[$school]['minimum'] ?? $minimum,$minimum);}
         }
     }
     return compact('candidates','assigned','ranks','used','quotas','cutoffs','tie','hash')+['errors'=>array_values(array_unique($errors))];
 }
 function selection_resolutions(PDO $pdo,int $period): array {$q=$pdo->prepare('SELECT tie_key,chosen_candidates FROM admission_tie_resolutions WHERE admission_period_id=?');$q->execute([$period]);$out=[];foreach($q as $r)$out[$r['tie_key']]=json_decode($r['chosen_candidates'],true,512,JSON_THROW_ON_ERROR);return $out;}
 function selection_snapshot(PDO $pdo,int $run): ?array {$q=$pdo->prepare('SELECT * FROM admission_run_snapshots WHERE admission_run_id=?');$q->execute([$run]);$r=$q->fetch();if(!$r)return null;$r['inputs']=json_decode($r['inputs'],true,512,JSON_THROW_ON_ERROR);$r['report']=json_decode($r['report'],true,512,JSON_THROW_ON_ERROR);return $r;}
-function selection_calculate(PDO $pdo,int $period,int $actor): int {
+function selection_assert_not_saved(PDO $pdo,int $period): void {
+    $q=$pdo->prepare('SELECT id FROM admission_runs WHERE admission_period_id=? AND status IN ("calculated","finalized") LIMIT 1');$q->execute([$period]);
+    if($q->fetchColumn())throw new RuntimeException('Đã xét tuyển. Không được ghi đè kết quả đã lưu.');
+}
+function selection_preview(PDO $pdo,int $period,int $actor): array {
+    selection_actor($pdo,$actor);selection_assert_not_saved($pdo,$period);
+    $errors=selection_prerequisites($pdo,$period);if($errors)throw new RuntimeException(implode(' ',$errors));
+    $inputs=selection_inputs($pdo,$period);$plan=selection_plan($inputs);
+    if($plan['errors'])throw new RuntimeException(implode(' ',$plan['errors']));
+    return ['inputs'=>$inputs,'report'=>$plan];
+}
+function selection_calculate(PDO $pdo,int $period,int $actor,?string $previewHash=null): int {
+    if(!$previewHash)throw new RuntimeException('Cần chạy xem trước và xác nhận lưu.');
     selection_actor($pdo,$actor);$pdo->beginTransaction();try{
-        selection_lock($pdo,$period);$errors=selection_prerequisites($pdo,$period);if($errors)throw new RuntimeException(implode(' ',$errors));
-        $inputs=selection_inputs($pdo,$period);$plan=selection_plan($inputs,selection_resolutions($pdo,$period));if($plan['errors'])throw new RuntimeException(implode(' ',$plan['errors']));
+        selection_lock($pdo,$period);selection_assert_not_saved($pdo,$period);$errors=selection_prerequisites($pdo,$period);if($errors)throw new RuntimeException(implode(' ',$errors));
+        $inputs=selection_inputs($pdo,$period);$plan=selection_plan($inputs);if(!hash_equals($previewHash,$plan['hash']))throw new RuntimeException('Dữ liệu đã thay đổi. Hãy chạy xem trước lại.');if($plan['tie'])throw new RuntimeException('Vẫn đồng điểm gốc tại ranh giới chỉ tiêu; chưa thể lưu.');if($plan['errors'])throw new RuntimeException(implode(' ',$plan['errors']));
         $status=$plan['tie']?'blocked':'calculated';$reason=$plan['tie']?'Đồng điểm tại ranh giới chỉ tiêu; cần rà soát biên bản mô phỏng.':null;
         $pdo->prepare('INSERT INTO admission_runs(admission_period_id,status,started_by_user_id,calculated_at,blocked_reason) VALUES(?,?,?,NOW(),?)')->execute([$period,$status,$actor,$reason]);$run=(int)$pdo->lastInsertId();
         if(!$plan['tie']){

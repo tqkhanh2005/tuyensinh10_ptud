@@ -208,7 +208,8 @@ function quota_save_all(
     PDO $pdo,
     int $periodId,
     array $quotas,
-    ?int $expectedRevision = null
+    ?int $expectedRevision = null,
+    ?string $expectedSnapshot = null
 ): void {
     $pdo->beginTransaction();
 
@@ -216,6 +217,11 @@ function quota_save_all(
         $periodQuery=$pdo->prepare('SELECT status FROM admission_periods WHERE id=? FOR UPDATE');
         $periodQuery->execute([$periodId]); $periodStatus=$periodQuery->fetchColumn();
         if (!$periodStatus) throw new InvalidArgumentException('Không tìm thấy kỳ tuyển sinh.');
+        $blocked = quota_edit_block_reason($pdo, $periodId);
+        if ($blocked !== '') throw new RuntimeException($blocked);
+        if ($expectedSnapshot !== null && !hash_equals($expectedSnapshot, quota_snapshot(quota_rows($pdo, $periodId)))) {
+            throw new RuntimeException('Danh sách trường hoặc chỉ tiêu đã thay đổi. Vui lòng tải lại trang và rà soát trước khi lưu.');
+        }
         if (period_configuration($pdo,$periodId) && $periodStatus!=='draft') throw new RuntimeException('Chỉ sửa chỉ tiêu khi kỳ còn là bản nháp.');
         $cfg=period_configuration($pdo,$periodId);
         if($cfg && $expectedRevision!==null && $cfg['revision']!==$expectedRevision) throw new RuntimeException('Chỉ tiêu hoặc cấu hình đã thay đổi. Vui lòng tải lại trước khi lưu.');
@@ -245,14 +251,8 @@ function quota_save_all(
         foreach ($quotas as $schoolId => $quota) {
             if (
                 !ctype_digit((string)$schoolId)
-                || !ctype_digit((string)$quota)
+                || !quota_positive_integer($quota)
             ) {
-                throw new InvalidArgumentException(
-                    'Chỉ tiêu phải là số nguyên dương.'
-                );
-            }
-
-            if ((int)$quota <= 0) {
                 throw new InvalidArgumentException(
                     'Chỉ tiêu phải là số nguyên dương.'
                 );
@@ -284,6 +284,40 @@ function quota_save_all(
     }
 }
 
+function quota_positive_integer($value): bool
+{
+    if (!is_string($value) && !is_int($value)) return false;
+    $value = ltrim((string)$value, '0');
+    return $value !== '' && ctype_digit($value)
+        && (strlen($value) < 10 || (strlen($value) === 10 && strcmp($value, '4294967295') <= 0));
+}
+
+function quota_snapshot(array $rows): string
+{
+    $snapshot = [];
+    foreach ($rows as $row) $snapshot[(int)$row['school_id']] = [(string)$row['school_code'], (string)$row['name'], (string)$row['quota'], (string)$row['quota_status']];
+    ksort($snapshot);
+    return hash('sha256', json_encode($snapshot, JSON_THROW_ON_ERROR));
+}
+
+function quota_edit_block_reason(PDO $pdo, int $periodId): string
+{
+    $period = admission_period_find($pdo, $periodId);
+    if (!$period) return 'Không tìm thấy kỳ tuyển sinh.';
+    if ($period['status'] !== 'draft') return 'Chỉ sửa chỉ tiêu khi kỳ còn là bản nháp.';
+    $q = $pdo->prepare('SELECT exam_date,start_time,status FROM exam_subjects WHERE admission_period_id=?');
+    $q->execute([$periodId]);
+    $now = new DateTimeImmutable('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+    foreach ($q->fetchAll() as $subject) {
+        if ($subject['status'] === 'completed') return 'Kỳ thi đã diễn ra, không thể thay đổi chỉ tiêu.';
+        if ($subject['exam_date'] !== null) {
+            $start = new DateTimeImmutable($subject['exam_date'] . ' ' . ($subject['start_time'] ?: '00:00:00'), new DateTimeZone('Asia/Ho_Chi_Minh'));
+            if ($now >= $start) return 'Kỳ thi đã bắt đầu, không thể thay đổi chỉ tiêu.';
+        }
+    }
+    return '';
+}
+
 function quota_publish(PDO $pdo, int $periodId): void
 {
     $pdo->beginTransaction();
@@ -291,7 +325,7 @@ function quota_publish(PDO $pdo, int $periodId): void
         $q=$pdo->prepare('SELECT status FROM admission_periods WHERE id=? FOR UPDATE');$q->execute([$periodId]);$status=$q->fetchColumn();
         $cfg=period_configuration($pdo,$periodId);
         if (!$status) throw new InvalidArgumentException('Không tìm thấy kỳ tuyển sinh.');
-        if ($cfg && ($status!=='published' || $cfg['settings']['mode']!=='official')) throw new RuntimeException('Chỉ công bố chỉ tiêu của kỳ chính thức đang công bố.');
+        if (!$cfg || $status!=='published' || $cfg['settings']['mode']!=='official') throw new RuntimeException('Chỉ công bố chỉ tiêu của kỳ chính thức đang công bố.');
         $q=$pdo->prepare('SELECT COUNT(*) FROM admission_quotas WHERE admission_period_id=? AND status="set" AND quota>0');$q->execute([$periodId]);
         if (!(int)$q->fetchColumn()) throw new RuntimeException('Chưa có chỉ tiêu để công bố.');
         $pdo->prepare('UPDATE admission_quotas SET published_at=CURRENT_TIMESTAMP WHERE admission_period_id=?')->execute([$periodId]);

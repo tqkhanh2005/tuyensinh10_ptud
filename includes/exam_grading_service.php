@@ -8,17 +8,17 @@ function grading_state(PDO $pdo,int $period): ?array {
 }
 /** Common period lock for grading, review, publication and appeal writers. */
 function grading_period_lock(PDO $pdo,int $period): ?array {
-    $cfg=period_configuration($pdo,$period);if(!$cfg)return null;
     $q=$pdo->prepare('SELECT status FROM admission_periods WHERE id=? FOR UPDATE');$q->execute([$period]);
     if($q->fetchColumn()!=='published')throw new RuntimeException('Kỳ tuyển sinh chưa công bố hoặc đã đóng.');
-    return $cfg;
+    return period_configuration($pdo,$period);
 }
 function grading_editable(PDO $pdo,int $period,?int $subject=null,string $phase=''): void {
-    if(!grading_period_lock($pdo,$period))return;
-    if(empty(exam_organization_state($pdo,$period)['released_at']))throw new RuntimeException('Cần phát hành phiếu dự thi trước khi xử lý bài thi.');
-    if(grading_state($pdo,$period))throw new RuntimeException('Điểm đã được rà soát và khóa; không thể sửa dữ liệu chấm thi.');
+    $cfg=grading_period_lock($pdo,$period);
     $q=$pdo->prepare('SELECT 1 FROM publication_events WHERE admission_period_id=? AND publication_type="exam_results" AND status="published"');$q->execute([$period]);
     if($q->fetchColumn())throw new RuntimeException('Điểm thi đã công bố và bị khóa.');
+    if(!$cfg)return;
+    if(empty(exam_organization_state($pdo,$period)['released_at']))throw new RuntimeException('Cần phát hành phiếu dự thi trước khi xử lý bài thi.');
+    if(grading_state($pdo,$period))throw new RuntimeException('Điểm đã được rà soát và khóa; không thể sửa dữ liệu chấm thi.');
     if($subject && in_array($phase,['attendance','codes','scores'],true)){
         $q=$pdo->prepare('SELECT exam_date,start_time,end_time FROM exam_subjects WHERE admission_period_id=? AND id=?');$q->execute([$period,$subject]);$s=$q->fetch();
         $edge=$phase==='attendance'?'start_time':'end_time';

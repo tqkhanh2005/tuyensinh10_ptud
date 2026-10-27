@@ -1,5 +1,7 @@
 # Bước 5 — Xét tuyển và duyệt kết quả
 
+> Luồng xem trước và quy tắc xét tuyển đã được cập nhật theo đặc tả mới tại [selection_preview_workflow.md](selection_preview_workflow.md). Các mô tả lưu ngay, chạy lại, ngưỡng vòng sau và xử lý đồng điểm bên dưới là tài liệu lịch sử.
+
 Mở **Xét tuyển → Chạy xét tuyển**. Phạm vi triển khai hiện tại là mô phỏng lớp 10 thường THPT công lập TP.HCM 2026–2027. Kỳ chính thức vẫn bị chặn chạy tự động cho đến khi có quy tắc đầy đủ và được nghiệm thu; không đổi nhãn mô phỏng thành kết quả chính thức.
 
 ## Quy trình

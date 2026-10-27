@@ -20,12 +20,15 @@ function current_admission_period_id(PDO $pdo):int {
     return (int)$id;
 }
 function publish_exam_results(PDO $pdo,int $periodId,int $userId):void {
+    $actor=$pdo->prepare('SELECT 1 FROM users u JOIN user_roles ur ON ur.user_id=u.id JOIN roles r ON r.id=ur.role_id AND r.active=1 JOIN role_permissions rp ON rp.role_id=r.id JOIN permissions p ON p.id=rp.permission_id WHERE u.id=? AND u.active=1 AND p.code="publication.manage" LIMIT 1');
+    $actor->execute([$userId]);if(!$actor->fetchColumn())throw new RuntimeException('Không có quyền công bố điểm thi.');
     $pdo->beginTransaction();
     try {
         if(grading_period_lock($pdo,$periodId)){
             if(!grading_state($pdo,$periodId))throw new RuntimeException('Cần rà soát và khóa điểm trước khi công bố.');
-            $ready=grading_readiness($pdo,$periodId);if($ready['errors'])throw new RuntimeException(implode(' ',$ready['errors']));
         }
+        $ready=exam_publication_readiness($pdo,$periodId);
+        if($ready['errors'])throw new RuntimeException(implode(' ',$ready['errors']));
         if(publication_exists($pdo,$periodId,'exam_results')) throw new RuntimeException('Điểm thi đã được công bố.');
         $q=$pdo->prepare('SELECT COUNT(*) FROM scores sc JOIN exam_papers ep ON ep.id=sc.exam_paper_id WHERE ep.admission_period_id=:p');
         $q->execute(['p'=>$periodId]);
@@ -35,14 +38,51 @@ function publish_exam_results(PDO $pdo,int $periodId,int $userId):void {
         $pdo->commit();
     } catch(Throwable $e){if($pdo->inTransaction())$pdo->rollBack();throw $e;}
 }
-function publish_admission_results(PDO $pdo,int $periodId,int $userId):void {
+/** Initial scores only: appeals never replace values on the publication review screen. */
+function exam_publication_rows(PDO $pdo,int $period): array {
+    $q=$pdo->prepare('SELECT c.id candidate_id,n.exam_number,c.full_name,s.id subject_id,s.name subject_name,p.id paper_id,p.attendance_status,p.paper_status,p.anonymous_code,p.penalty_percent,sc.anonymous_code score_code,sc.total_score
+        FROM room_assignments ra JOIN candidates c ON c.id=ra.candidate_id
+        JOIN exam_subjects s ON s.admission_period_id=ra.admission_period_id
+        LEFT JOIN exam_candidate_numbers n ON n.candidate_id=c.id AND n.admission_period_id=ra.admission_period_id
+        LEFT JOIN exam_papers p ON p.candidate_id=c.id AND p.exam_subject_id=s.id AND p.admission_period_id=ra.admission_period_id
+        LEFT JOIN scores sc ON sc.exam_paper_id=p.id
+        WHERE ra.admission_period_id=? ORDER BY n.exam_number,c.id,s.id');
+    $q->execute([$period]);return $q->fetchAll();
+}
+function exam_publication_row_errors(array $rows): array {
+    $errors=[];
+    if(!$rows)$errors[]='Chưa có danh sách thí sinh và bài thi để công bố.';
+    foreach($rows as $r){
+        if(empty($r['exam_number']))$errors[]='Có thí sinh chưa có số báo danh.';
+        if(empty($r['paper_id'])){$errors[]='Có thí sinh thiếu bài thi.';continue;}
+        if($r['attendance_status']==='absent'){
+            if($r['total_score']!==null)$errors[]='Bài vắng thi không được có điểm.';
+            continue;
+        }
+        if(!in_array($r['attendance_status'],['present','present_penalty'],true))$errors[]='Có bài thi chưa xác nhận điểm danh.';
+        if($r['total_score']===null || !is_numeric($r['total_score']) || !is_finite((float)$r['total_score']) || (float)$r['total_score']<0 || (float)$r['total_score']>10)$errors[]='Có bài thi chưa nhập điểm hoặc điểm không hợp lệ.';
+        if($r['paper_status']!=='matched' || empty($r['anonymous_code']) || $r['anonymous_code']!==$r['score_code'])$errors[]='Có bài thi chưa ghép phách đúng với điểm của thí sinh.';
+    }
+    return array_values(array_unique($errors));
+}
+function exam_publication_readiness(PDO $pdo,int $period): array {
+    $rows=exam_publication_rows($pdo,$period);
+    $ready=grading_readiness($pdo,$period);
+    return ['rows'=>$rows,'errors'=>array_values(array_unique(array_merge($ready['errors'],exam_publication_row_errors($rows))))];
+}
+function publish_admission_results(PDO $pdo,int $periodId,int $userId,?int $expectedRun=null):void {
+    $actor=$pdo->prepare('SELECT 1 FROM users u JOIN user_roles ur ON ur.user_id=u.id JOIN roles r ON r.id=ur.role_id AND r.active=1 JOIN role_permissions rp ON rp.role_id=r.id JOIN permissions p ON p.id=rp.permission_id WHERE u.id=? AND u.active=1 AND p.code="publication.manage" LIMIT 1');
+    $actor->execute([$userId]);if(!$actor->fetchColumn())throw new RuntimeException('Không có quyền công bố kết quả tuyển sinh.');
     $pdo->beginTransaction();
     try {
-        if(period_configuration($pdo,$periodId))selection_publish_check($pdo,$periodId);
+        $lock=$pdo->prepare('SELECT id FROM admission_periods WHERE id=? FOR UPDATE');$lock->execute([$periodId]);
+        if(!$lock->fetchColumn())throw new RuntimeException('Kỳ tuyển sinh không tồn tại.');
         if(publication_exists($pdo,$periodId,'admission_results')) throw new RuntimeException('Kết quả tuyển sinh đã được công bố.');
+        selection_publish_check($pdo,$periodId);
         $run=$pdo->prepare('SELECT id,status FROM admission_runs WHERE admission_period_id=:p ORDER BY id DESC LIMIT 1 FOR UPDATE');
         $run->execute(['p'=>$periodId]); $r=$run->fetch();
-        if(!$r || !in_array($r['status'],['calculated','finalized'],true)) throw new RuntimeException('Kết quả xét tuyển chưa được thực hiện.');
+        if(!$r || $r['status']!=='calculated') throw new RuntimeException('Kết quả xét tuyển chưa được thực hiện.');
+        if($expectedRun===null || (int)$r['id']!==$expectedRun)throw new RuntimeException('Lượt xét tuyển đã thay đổi hoặc chưa được đối chiếu. Hãy tải lại danh sách và xác nhận.');
         $upd=$pdo->prepare('UPDATE admission_runs SET status="finalized",finalized_at=COALESCE(finalized_at,CURRENT_TIMESTAMP) WHERE id=:id');
         $upd->execute(['id'=>(int)$r['id']]);
         $ins=$pdo->prepare('INSERT INTO publication_events(admission_period_id,publication_type,status,published_by_user_id) VALUES(:p,"admission_results","published",:u)');
