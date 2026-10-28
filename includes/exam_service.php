@@ -591,7 +591,7 @@ function save_attendance(PDO $pdo, int $periodId, int $subjectId, int $roomId, a
     $pdo->beginTransaction();
     try {
         grading_editable($pdo,$periodId,$subjectId,'attendance');
-        $locked=$pdo->prepare('SELECT id,attendance_status,penalty_percent,anonymous_code,paper_status FROM exam_papers WHERE admission_period_id=? AND exam_subject_id=? AND exam_room_id=? ORDER BY id FOR UPDATE');$locked->execute([$periodId,$subjectId,$roomId]);$existing=[];foreach($locked as $row)$existing[(int)$row['id']]=$row;
+        $locked=$pdo->prepare('SELECT id,attendance_status,penalty_percent,anonymous_code,paper_status FROM exam_papers WHERE admission_period_id=? AND exam_subject_id=? AND exam_room_id=? ORDER BY id FOR UPDATE');$locked->execute([$periodId,$subjectId,$roomId]);$existing=[];foreach($locked as $row)$existing[(int)$row['id']]=$row; $roomCoded=false;foreach($existing as $o){if($o['anonymous_code']!==null || in_array($o['paper_status'],['scored','matched'],true)){$roomCoded=true;break;}}
         $u = $pdo->prepare('UPDATE exam_papers SET attendance_status=:status,penalty_percent=:penalty
                             WHERE id=:id AND admission_period_id=:p AND exam_subject_id=:s AND exam_room_id=:r');
         foreach ($attendance as $paperId => $data) {
@@ -603,7 +603,7 @@ function save_attendance(PDO $pdo, int $periodId, int $subjectId, int $roomId, a
             if(period_configuration($pdo,$periodId)){
                 $old=$existing[(int)$paperId] ?? null;
                 if(!$old)throw new InvalidArgumentException('Bài thi đã thay đổi.');
-                if(($old['anonymous_code']!==null || in_array($old['paper_status'],['scored','matched'],true)) && ($old['attendance_status']!==$status || (int)($old['penalty_percent'] ?? 0)!==(int)($penalty ?? 0)))throw new RuntimeException('Đã đánh phách hoặc nhập điểm; không đổi điểm danh/xử phạt.');
+                if($roomCoded && ($old['attendance_status']!==$status || (int)($old['penalty_percent'] ?? 0)!==(int)($penalty ?? 0)))throw new RuntimeException('Phòng/môn đã đánh phách; điểm danh và xử phạt đã được chốt, không thể thay đổi.');
             }
             $u->execute(['status' => $status, 'penalty' => $penalty, 'id' => (int)$paperId, 'p' => $periodId, 's' => $subjectId, 'r' => $roomId]);
             // rowCount() is not an ownership/existence check in MySQL: an UPDATE
