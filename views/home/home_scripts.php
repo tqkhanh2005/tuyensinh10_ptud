@@ -156,6 +156,41 @@
   }
 
   setupShowMore('btnMoreQuotas', 'quotaContainer', 'quota-item');
+
+  document.querySelectorAll('.quota-year-filter').forEach((button) => {
+    button.addEventListener('click', function() {
+      const year = this.dataset.year || '';
+      document.querySelectorAll('.quota-year-filter').forEach((item) => {
+        item.classList.remove('tw-bg-primary', 'tw-border-primary', 'tw-text-white');
+        item.classList.add('tw-bg-white', 'tw-border-primary/20', 'tw-text-primary');
+      });
+      this.classList.remove('tw-bg-white', 'tw-border-primary/20', 'tw-text-primary');
+      this.classList.add('tw-bg-primary', 'tw-border-primary', 'tw-text-white');
+
+      const items = Array.from(document.querySelectorAll('#quotaContainer .quota-item'));
+      let visibleCount = 0;
+      items.forEach((item, index) => {
+        const matches = item.dataset.year === year;
+        item.classList.toggle('hidden-item', !matches || index >= getLimits().quota);
+        if (matches) visibleCount++;
+      });
+
+      const visibleInCurrentYear = items.filter((item) => item.dataset.year === year).slice(0, getLimits().quota).length;
+      const totalInCurrentYear = items.filter((item) => item.dataset.year === year).length;
+      const emptyState = document.getElementById('quotaEmptyState');
+      if (emptyState) {
+        emptyState.classList.toggle('tw-hidden', totalInCurrentYear > 0);
+        if (totalInCurrentYear === 0) {
+          emptyState.querySelector('p:first-of-type').innerText = 'Năm học chưa có chỉ tiêu được công bố';
+        }
+      }
+      const showMoreWrap = document.getElementById('btnMoreQuotas')?.parentElement;
+      if (showMoreWrap) showMoreWrap.style.display = totalInCurrentYear > visibleInCurrentYear ? 'flex' : 'none';
+      const search = document.getElementById('quotaSearch');
+      if (search) search.value = '';
+    });
+  });
+
   setupShowMore('btnMoreThpt', 'thptContainer', 'school-item');
   setupShowMore('btnMoreThcs', 'thcsContainer', 'school-item');
 
@@ -192,6 +227,8 @@
 
   // Initialize limits
   applyInitialLimits();
+  const selectedQuotaYearButton = document.querySelector('.quota-year-filter.tw-bg-primary');
+  if (selectedQuotaYearButton) selectedQuotaYearButton.click();
   window.addEventListener('resize', applyInitialLimits);
 
   // Custom Tab switching for Network

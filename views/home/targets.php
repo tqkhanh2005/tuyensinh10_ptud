@@ -3,6 +3,17 @@
  * Home View: Admissions Quotas Section
  */
 $quotas = require __DIR__ . '/../../data/quotas_published.php';
+$admissionYear = $quotas[0]['academic_year'] ?? '2026-2027';
+$quotaYears = array_values(array_unique(array_filter(array_map(
+    static fn(array $quota): string => (string)($quota['academic_year'] ?? ''),
+    $quotas
+))));
+rsort($quotaYears);
+$selectedYear = count($quotas) > 0
+    ? (in_array('2026-2027', array_column($quotas, 'academic_year'), true)
+        ? '2026-2027'
+        : ($quotaYears[0] ?? ''))
+    : '2026-2027';
 ?>
 <!-- Admissions Quotas -->
 <section id="targets" class="tw-bg-surface-container-low tw-py-24">
@@ -10,6 +21,18 @@ $quotas = require __DIR__ . '/../../data/quotas_published.php';
     <div class="tw-text-center tw-mb-12">
       <h2 class="tw-text-4xl tw-font-headline tw-font-extrabold tw-text-on-surface tw-mb-2">Chỉ tiêu tuyển sinh</h2>
       <p class="tw-text-on-surface-variant">Chỉ tiêu của các trường THPT tại TP.HCM được công bố trên hệ thống.</p>
+      <div class="tw-flex tw-flex-wrap tw-justify-center tw-gap-2 tw-mt-5" role="group" aria-label="Chọn năm học">
+        <?php foreach ($quotaYears as $year): ?>
+          <button type="button" class="quota-year-filter tw-px-4 tw-py-1.5 tw-rounded-full tw-border tw-text-sm tw-font-bold tw-transition-all <?= $year === $selectedYear ? 'tw-bg-primary tw-border-primary tw-text-white' : 'tw-bg-white tw-border-primary/20 tw-text-primary hover:tw-border-primary' ?>" data-year="<?= e($year) ?>">
+            Năm học <?= e($year) ?>
+          </button>
+        <?php endforeach; ?>
+        <?php if (!$quotaYears): ?>
+          <span class="tw-inline-flex tw-px-4 tw-py-1.5 tw-rounded-full tw-bg-primary/10 tw-text-primary tw-text-sm tw-font-bold">
+            Năm học <?= e((string)$admissionYear) ?>
+          </span>
+        <?php endif; ?>
+      </div>
     </div>
 
     <!-- Search Bar for Quotas -->
@@ -36,7 +59,7 @@ $quotas = array_values(array_filter($quotas ?? [], function($q) {
       </div>
 
       <?php foreach ($quotas as $idx => $quota): ?>
-        <div class="quota-item tw-bg-surface-container-lowest tw-p-6 tw-rounded-2xl tw-shadow-md tw-border tw-border-outline-variant/20 hover:tw-border-primary/30 hover:tw-shadow-xl hover:tw--translate-y-1 tw-transition-all reveal <?= $idx >= 6 ? 'hidden-item' : '' ?>" data-name="<?= e($quota['data_name']) ?>">
+        <div class="quota-item tw-bg-surface-container-lowest tw-p-6 tw-rounded-2xl tw-shadow-md tw-border tw-border-outline-variant/20 hover:tw-border-primary/30 hover:tw-shadow-xl hover:tw--translate-y-1 tw-transition-all reveal <?= $idx >= 6 ? 'hidden-item' : '' ?>" data-name="<?= e($quota['data_name']) ?>" data-year="<?= e((string)($quota['academic_year'] ?? '')) ?>">
           <div class="tw-flex tw-justify-between tw-items-start tw-mb-4">
             <h4 class="tw-text-lg tw-font-headline tw-font-bold tw-text-on-surface tw-leading-tight tw-pr-2"><?= e($quota['name']) ?></h4>
             <?php if (!empty($quota['code'])): ?>

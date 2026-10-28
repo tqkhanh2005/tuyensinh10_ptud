@@ -20,6 +20,7 @@ return [
     'thpt' => [
         $makeSchool('Trường THPT Nguyễn Thị Minh Khai', 'THPT', 'https://thptnguyenthiminhkhai.hcm.edu.vn/'),
         $makeSchool('Trường THPT Trần Phú', 'THPT', 'https://thpttranphu.hcm.edu.vn/'),
+        $makeSchool('Trường THPT Marie Curie', 'THPT', 'https://thptmariecurie.hcm.edu.vn/'),
     ],
     'thcs' => [
         $makeSchool('Trường THCS Nguyễn Du', 'THCS', 'https://thcsnguyenduq1.hcm.edu.vn/'),
