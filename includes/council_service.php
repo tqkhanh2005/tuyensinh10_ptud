@@ -56,7 +56,7 @@ function council_sites(PDO $pdo, int $periodId): array
 function council_validate_members(PDO $pdo, array $members, string $type): array
 {
     if (!$members) {
-        throw new InvalidArgumentException('[MISSING SPECIFICATION] Số lượng tối thiểu thành viên hội đồng chưa được đặc tả.');
+        throw new InvalidArgumentException('Vui lòng thêm ít nhất một thành viên hội đồng.');
     }
     $ids=[]; $normalized=[];
     foreach ($members as $member) {
@@ -65,7 +65,9 @@ function council_validate_members(PDO $pdo, array $members, string $type): array
         if (isset($ids[$staffId])) throw new InvalidArgumentException('Không được trùng thành viên trong cùng hội đồng.');
         $ids[$staffId]=true;
         $role=trim((string)($member['role_name'] ?? ''));
+        if ($type==='question') $role=mb_strtolower($role, 'UTF-8');
         $task=trim((string)($member['task_name'] ?? ''));
+        if (mb_strlen($role)>100 || mb_strlen($task)>255) throw new InvalidArgumentException('Vai trò tối đa 100 ký tự; nhiệm vụ tối đa 255 ký tự.');
         if ($type==='question' && $role==='') {
             throw new InvalidArgumentException('Hội đồng ra đề phải phân công vai trò ra đề, phản biện hoặc thẩm định cho từng thành viên.');
         }
@@ -75,7 +77,7 @@ function council_validate_members(PDO $pdo, array $members, string $type): array
         $normalized[]=['staff_id'=>$staffId,'role_name'=>$role!==''?$role:null,'task_name'=>$task!==''?$task:null];
     }
     $placeholders=implode(',',array_fill(0,count($ids),'?'));
-    $q=$pdo->prepare("SELECT id,active FROM staff WHERE id IN ($placeholders)");
+    $q=$pdo->prepare("SELECT id,active FROM staff WHERE id IN ($placeholders) ORDER BY id FOR UPDATE");
     $q->execute(array_keys($ids));
     $found=[];
     foreach($q as $row){
@@ -90,6 +92,15 @@ function council_validate_members(PDO $pdo, array $members, string $type): array
 
 require_once __DIR__.'/exam_organization_service.php';
 
+function council_datetime(string $value): ?string {
+    $value=trim($value); if($value==='')return null;
+    foreach(['Y-m-d\TH:i','Y-m-d\TH:i:s','Y-m-d H:i','Y-m-d H:i:s'] as $format){
+        $date=DateTimeImmutable::createFromFormat('!'.$format,$value,new DateTimeZone('Asia/Ho_Chi_Minh'));
+        if($date && $date->format($format)===$value && (int)$date->format('Y')>=1000)return $date->format('Y-m-d H:i:s');
+    }
+    throw new InvalidArgumentException('Ngày giờ không hợp lệ. Vui lòng chọn lại thời gian.');
+}
+
 function council_create(PDO $pdo, array $data): int
 {
     $periodId=(int)($data['admission_period_id']??0);
@@ -97,15 +108,22 @@ function council_create(PDO $pdo, array $data): int
     $name=trim((string)($data['name']??''));
     $siteId=(int)($data['exam_site_id']??0);
     $subjectIds=array_values(array_unique(array_map('intval',(array)($data['exam_subject_ids']??[]))));
-    $members=council_validate_members($pdo,(array)($data['members']??[]),$type);
+
     if($periodId<1 || !in_array($type,COUNCIL_TYPES,true) || $name==='') throw new InvalidArgumentException('Thông tin hội đồng không hợp lệ.');
-    if(!empty($data['start_at']) && !empty($data['end_at']) && strtotime((string)$data['end_at']) < strtotime((string)$data['start_at'])) throw new InvalidArgumentException('Thời gian kết thúc không được trước thời gian bắt đầu.');
+    if(mb_strlen($name)>200 || mb_strlen(trim((string)($data['location']??'')))>255) throw new InvalidArgumentException('Tên hội đồng tối đa 200 ký tự; địa điểm tối đa 255 ký tự.');
+    $start=council_datetime((string)($data['start_at']??'')); $end=council_datetime((string)($data['end_at']??''));
+    if(($start===null)!==($end===null)) throw new InvalidArgumentException('Vui lòng nhập cả thời gian bắt đầu và kết thúc, hoặc để trống cả hai.');
+    if($start!==null && $end<=$start) throw new InvalidArgumentException('Thời gian kết thúc phải sau thời gian bắt đầu.');
 
     $pdo->beginTransaction();
     try{
         if($type==='invigilation')exam_organization_editable($pdo,$periodId);
         $p=$pdo->prepare('SELECT id FROM admission_periods WHERE id=:p FOR UPDATE');$p->execute(['p'=>$periodId]);
         if(!$p->fetchColumn()) throw new InvalidArgumentException('Kỳ tuyển sinh không tồn tại.');
+        $members=council_validate_members($pdo,(array)($data['members']??[]),$type);
+        $duplicate=$pdo->prepare('SELECT id FROM councils WHERE admission_period_id=? AND council_type=? AND name=? LIMIT 1');
+        $duplicate->execute([$periodId,$type,$name]);
+        if($duplicate->fetchColumn()) throw new InvalidArgumentException('Tên hội đồng đã tồn tại trong kỳ tuyển sinh này. Vui lòng chọn tên khác.');
         if($type==='invigilation'){
             if($siteId<1) throw new InvalidArgumentException('Hội đồng coi thi phải gắn với điểm thi.');
             $s=$pdo->prepare('SELECT id FROM exam_sites WHERE id=:s AND admission_period_id=:p FOR UPDATE');$s->execute(['s'=>$siteId,'p'=>$periodId]);
@@ -122,8 +140,7 @@ function council_create(PDO $pdo, array $data): int
             sort($valid); $expected=$subjectIds; sort($expected);
             if($valid!==$expected) throw new InvalidArgumentException('Có môn thi không thuộc kỳ tuyển sinh hiện tại.');
         }
-        $start=trim((string)($data['start_at']??'')); $end=trim((string)($data['end_at']??''));
-        $start=$start!==''?str_replace('T',' ',$start):null; $end=$end!==''?str_replace('T',' ',$end):null;
+
         $q=$pdo->prepare('INSERT INTO councils(admission_period_id,council_type,name,exam_site_id,start_at,end_at,location,status) VALUES(:p,:t,:n,:site,:start,:end,:location,"established")');
         $q->execute(['p'=>$periodId,'t'=>$type,'n'=>$name,'site'=>$siteId>0?$siteId:null,'start'=>$start,'end'=>$end,'location'=>trim((string)($data['location']??''))?:null]);
         $councilId=(int)$pdo->lastInsertId();
@@ -151,4 +168,29 @@ function invigilator_context(PDO $pdo,int $roomId,int $subjectId):array
     $q->execute(['r'=>$roomId,'subject'=>$subjectId]);$row=$q->fetch();
     if(!$row)throw new InvalidArgumentException('Phòng thi và môn thi không thuộc cùng kỳ tuyển sinh.');
     return $row;
+}
+
+/** Cancel without deleting members or subject history; serialize with assignment writers. */
+function council_cancel(PDO $pdo,int $id): int {
+    $pdo->beginTransaction();
+    try {
+        $q=$pdo->prepare('SELECT admission_period_id FROM councils WHERE id=?');$q->execute([$id]);$period=$q->fetchColumn();
+        if(!$period)throw new InvalidArgumentException('Không tìm thấy hội đồng.');
+        $q=$pdo->prepare('SELECT id FROM admission_periods WHERE id=? FOR UPDATE');$q->execute([$period]);
+        if(!$q->fetchColumn())throw new InvalidArgumentException('Kỳ tuyển sinh không tồn tại.');
+        $q=$pdo->prepare('SELECT * FROM councils WHERE id=? FOR UPDATE');$q->execute([$id]);$c=$q->fetch();
+        if(!$c)throw new InvalidArgumentException('Không tìm thấy hội đồng.');
+        if($c['status']==='cancelled')throw new InvalidArgumentException('Hội đồng đã được hủy trước đó.');
+        foreach(['exam_paper_grader_assignments','appeal_grader_assignments'] as $table){
+            $q=$pdo->prepare("SELECT a.id FROM $table a JOIN council_members cm ON cm.id=a.council_member_id WHERE cm.council_id=? LIMIT 1 FOR UPDATE");$q->execute([$id]);
+            if($q->fetchColumn())throw new InvalidArgumentException('Hội đồng đang có phân công chấm thi hoặc phúc khảo. Cần xử lý phân công trước khi hủy.');
+        }
+        if($c['council_type']==='invigilation'){
+            $q=$pdo->prepare('SELECT a.id FROM exam_invigilator_assignments a JOIN exam_rooms r ON r.id=a.exam_room_id JOIN exam_sites es ON es.id=r.exam_site_id JOIN council_members cm ON cm.staff_id=a.staff_id WHERE cm.council_id=? AND es.admission_period_id=? AND es.id=? LIMIT 1 FOR UPDATE');
+            $q->execute([$id,$period,$c['exam_site_id']]);
+            if($q->fetchColumn())throw new InvalidArgumentException('Thành viên hội đồng đang được phân công coi thi tại điểm thi này. Cần xử lý phân công trước khi hủy.');
+        }
+        $pdo->prepare('UPDATE councils SET status="cancelled" WHERE id=?')->execute([$id]);
+        $pdo->commit();return (int)$period;
+    }catch(Throwable $e){if($pdo->inTransaction())$pdo->rollBack();throw $e;}
 }

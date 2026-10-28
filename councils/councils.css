@@ -1,0 +1,29 @@
+/* Scoped member layout: labels above fields; actions share the field baseline. */
+#council-form .member-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1.2fr) auto;
+  align-items: end;
+  gap: 12px;
+  margin: 0 0 20px;
+}
+#council-form .member-row > div { width: auto; min-width: 0; padding: 0; }
+#council-form .member-row .form-label { display: block; margin: 0 0 8px; }
+#council-form .member-row .form-control,
+#council-form .member-row .form-select,
+#council-form .member-row .btn {
+  box-sizing: border-box;
+  height: 46px;
+  min-height: 46px;
+  margin: 0 !important;
+}
+#council-form .member-row input,
+#council-form .member-row select { width: 100%; }
+#council-form .member-actions { display: flex; align-items: end; }
+#council-form .member-actions .btn { white-space: nowrap; }
+#council-form [hidden] { display: none !important; }
+@media (max-width: 767px) {
+  #council-form .member-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); padding-bottom: 16px; border-bottom: 1px solid #dee2e6; }
+}
+@media (max-width: 479px) {
+  #council-form .member-row { grid-template-columns: minmax(0, 1fr); }
+}
